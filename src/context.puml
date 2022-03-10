@@ -12,4 +12,5 @@ Rel(pbc, ibs, "Uses")
 Rel(es, pbc, "Sends e-mails to")
 Rel(ibs, es, "Sends e-mails", "SMTP")
 Rel(ibs, mbs, "Uses")
+
 @enduml
