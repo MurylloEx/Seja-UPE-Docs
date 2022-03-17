@@ -1,0 +1,29 @@
+{
+  "name": "seja-upe-docs",
+  "version": "0.0.1",
+  "description": "Documentação do projeto Seja UPE, um sistema de autoconhecimento vocacional.",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "c4builder site"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MurylloEx/Seja-UPE-Docs.git"
+  },
+  "keywords": [
+    "seja",
+    "upe",
+    "react-native",
+    "nestjs",
+    "c4-model",
+    "architecture"
+  ],
+  "author": "Muryllo, Kelvin & Luiz Gustavo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MurylloEx/Seja-UPE-Docs/issues"
+  },
+  "homepage": "https://github.com/MurylloEx/Seja-UPE-Docs#readme"
+}
