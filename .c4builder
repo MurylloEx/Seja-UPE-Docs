@@ -12,7 +12,7 @@
 	"webTheme": "//unpkg.com/docsify/lib/themes/vue.css",
 	"repoUrl": "",
 	"docsifyTemplate": "",
-	"webPort": "3000",
+	"webPort": "80",
 	"pdfCss": "C:\\Users\\Muryllo\\AppData\\Roaming\\npm\\node_modules\\c4builder\\pdf.css",
 	"includeBreadcrumbs": true,
 	"includeLinkToDiagram": false,
