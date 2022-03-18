@@ -1,16 +1,20 @@
 @startuml Contexto
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
-
 LAYOUT_WITH_LEGEND()
+title "Seja UPE - Diagrama de contexto do sistema"
 
-Person(pbc, "Personal Banking Customer", "A customer of the bank, with personal bank accounts.")
-System(ibs, "Internet Banking System", "Allows customers to view information about their bank accounts, and make payments.")
-System_Ext(es, "E-mail system", "The internal Microsoft Exchange e-mail system.")
-System_Ext(mbs, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
+Person(personUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")
+System(systemSejaUPE, "Sistema Seja UPE", "O aplicativo Seja UPE, de propósito educativo, informativo e descritivo com forte foco em tornar a Universidade de Pernambuco mais próxima da sociedade, mostrar seus cursos e seu corpo docente de forma mais efetiva para aqueles vestibulandos que necessitem conhecer melhor a universidade.")
+System(systemWebSocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
+System_Ext(systemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
+System_Ext(systemNotification, "Sistema de Notificações", "É responsável por emitir as notificações no smartphone através do Expo Notifications para lembrete de interação com o aplicativo.")
+System_Ext(systemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
 
-Rel(pbc, ibs, "Uses")
-Rel(es, pbc, "Sends e-mails to")
-Rel(ibs, es, "Sends e-mails", "SMTP")
-Rel(ibs, mbs, "Uses")
+Rel(personUser, systemSejaUPE, "Visualiza e interage com as funcionalidades do sistema")
+Rel(systemEmail, personUser, "Manda e-mail para", "SMTP2GO")
+Rel(systemSejaUPE, systemEmail, "Manda e-mail utilizando", "SMTP2GO")
+Rel(systemSejaUPE, systemNotification, "Aplicativo agenda as notificações para aproximadamente 3 horas depois", "Expo Notification")
+Rel(systemSejaUPE, systemWebSocket, "Envie e recebe mensagens", "React Native useWebSocket")
+Rel(systemSejaUPE, systemOAuth2, "Autentica o usuário", "oAuth2")
 
 @enduml
