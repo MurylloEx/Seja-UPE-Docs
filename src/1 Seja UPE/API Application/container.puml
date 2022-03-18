@@ -1,28 +1,29 @@
-@startuml
+@startuml Contexto
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
 
-Container(spa, "Single Page Application", "javascript and react", "Provides all the internet banking functionality to customers via their web browser.")
-Container(ma, "Mobile App", "Xamarin", "Provides a limited subset ot the internet banking functionality to customers via their mobile mobile device.")
-Container(db, "Database", "Relational Database Schema", "Stores user registration information, hashed authentication credentials, access logs, etc.")
-System_Ext(mbs, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
+title "Seja UPE - Diagrama de container do sistema"
 
-Container_Boundary(api, "API Application") {
-    Component(sign, "Sign In Controller", "MVC Rest Controlle", "Allows users to sign in to the internet banking system")
-    Component(accounts, "Accounts Summary Controller", "MVC Rest Controlle", "Provides customers with a summory of their bank accounts")
-    Component(security, "Security Component", "Spring Bean", "Provides functionality related to singing in, changing passwords, etc.")
-    Component(mbsfacade, "Mainframe Banking System Facade", "Spring Bean", "A facade onto the mainframe banking system.")
+Person(personUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")
+Container_Boundary(systemSejaUPE, "Sistema Seja UPE") {
+    Component(componentMobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
+    Component(componentApi, "API REST", "NestJS/Node", "Provê as funcionalidades do Seja UPE via uma API JSON/HTTPS.")
+    ComponentDb(componentDataBase, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
 
-    Rel(sign, security, "Uses")
-    Rel(accounts, mbsfacade, "Uses")
-    Rel(security, db, "Read & write to", "JDBC")
-    Rel(mbsfacade, mbs, "Uses", "XML/HTTPS")
+    Rel(componentMobileApp, componentApi, "Faz uma chamada para API", "JSON/HTTPS")
+    Rel(componentApi, componentDataBase, "Realiza leitura e armazena dados", "TypeORM")
 }
+System(systemWebSocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
+System_Ext(systemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
+System_Ext(systemNotification, "Sistema de Notificações", "É responsável por emitir as notificações no smartphone através do Expo Notifications para lembrete de interação com o aplicativo.")
+System_Ext(systemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
 
-Rel(spa, sign, "Uses", "JSON/HTTPS")
-Rel(spa, accounts, "Uses", "JSON/HTTPS")
+Rel(personUser, systemSejaUPE, "Visualiza e interage com as funcionalidades do sistema")
+Rel(systemEmail, personUser, "Manda e-mail para", "SMTP2GO")
+Rel(systemSejaUPE, systemEmail, "Manda e-mail utilizando", "SMTP2GO")
+Rel(systemSejaUPE, systemNotification, "Aplicativo agenda as notificações para aproximadamente 3 horas depois", "Expo Notification")
+Rel(systemSejaUPE, systemWebSocket, "Envie e recebe mensagens", "React Native useWebSocket")
+Rel(systemSejaUPE, systemOAuth2, "Autentica o usuário", "oAuth2")
 
-Rel(ma, sign, "Uses", "JSON/HTTPS")
-Rel(ma, accounts, "Uses", "JSON/HTTPS")
 @enduml
