@@ -1,7 +1,7 @@
 {
 	"plantumlVersion": "latest",
-	"projectName": "Seja UPE Docs",
-	"homepageName": "Overview",
+	"projectName": "Seja UPE",
+	"homepageName": "Arquitetura de Software",
 	"rootFolder": "src",
 	"distFolder": "docs",
 	"generateMD": false,

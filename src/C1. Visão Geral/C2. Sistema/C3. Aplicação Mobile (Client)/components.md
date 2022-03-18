@@ -12,5 +12,3 @@ Supporting elements: Containers (within the software system in scope) plus peopl
 **Intended audience**: Software architects and developers.
 
 > Example of included local image
-
-![](2020-01-10-16-21-41.png)
