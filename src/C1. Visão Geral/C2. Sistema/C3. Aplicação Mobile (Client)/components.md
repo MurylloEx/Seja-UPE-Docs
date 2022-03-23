@@ -1,14 +1,11 @@
-**Level 3: Component diagram**
+### C3.1 Os Hooks
 
-Next you can zoom in and decompose each container further to identify the major structural building blocks and their interactions.
+### C3.2 Os Services
 
-The Component diagram shows how a container is made up of a number of "components", what each of those components are, their responsibilities and the technology/implementation details.
+### C3.3 Os Componentes
 
-**Scope**: A single container.
+### C3.4 As Páginas
 
-**Primary elements**: Components within the container in scope.
-Supporting elements: Containers (within the software system in scope) plus people and software systems directly connected to the components.
+### C3.5 Os Providers
 
-**Intended audience**: Software architects and developers.
-
-> Example of included local image
+### C3.6 Os Themes
