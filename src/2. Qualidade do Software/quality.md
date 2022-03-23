@@ -1,2 +1,2 @@
-**Quality**
+**Qualidade do Software**
 

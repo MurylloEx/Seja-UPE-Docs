@@ -1,8 +1,8 @@
 @startuml
 
-participant "Usuário"
-participant "Suggestions"
-participant "Survey"
+actor "Usuário"
+boundary "Suggestions"
+boundary "Survey"
 
 "Usuário" -> "Suggestions":1.Acessa a tela de sugestões na Tab "Não sei o que quero"
 "Suggestions" -> "Suggestions":1.1.Carrega informações de Campus, Cursos, Professores, etc : useCampusData

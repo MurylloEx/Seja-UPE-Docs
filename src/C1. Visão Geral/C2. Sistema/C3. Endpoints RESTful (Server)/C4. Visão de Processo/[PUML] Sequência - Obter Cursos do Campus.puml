@@ -1,0 +1,19 @@
+@startuml
+
+actor "Usuário"
+control "CampusController"
+participant "CourseService"
+entity "Repository<CampusModel>"
+entity "Repository<CourseModel>"
+
+"Usuário" -> "CampusController":1.Solicita os cursos de um Campus : onCampusCoursesRequested
+"CampusController" -> "CourseService":1.1.Consulta os cursos de um Campus : fetchCampusCourses
+"CourseService" -> "Repository<CampusModel>":1.1.1.Consulta o Campus pelo identificador especificado : findOne
+"Repository<CampusModel>" -->> "CourseService":reply.Retorna o Campus desejado : Promise<CampusModel | null>
+"CourseService" -> "CourseService":1.1.2.throw new CampusNotFoundException
+"CourseService" -> "Repository<CourseModel>":1.1.3.Consulta os cursos do Campus especificado : find
+"Repository<CourseModel>" -->> "CourseService":reply.Retorna uma lista de contatos referentes ao Campus : Promise<CourseModel[]>
+"CourseService" -->> "CampusController":reply.Retorna uma lista de cursos referentes ao Campus : CourseModel[]
+"CampusController" -->> "Usuário":reply.Retorna uma lista de cursos referentes ao Campus : CourseModel[]
+
+@enduml
