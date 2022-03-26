@@ -1,21 +1,80 @@
 @startuml
-!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
 
 LAYOUT_WITH_LEGEND()
 
-Container(api, "API Application", "java and Spring MVC", "Delivers the static content and the internet banking single page application.")
+title "Seja UPE - Diagrama de componentes da API Rest"
 
-Container_Boundary(spa, "Single Page Application") {
-    Component(routing, "Routing", "React router", "Handler slient side routing")
-    Component(store, "Data Store", "Redux", "The central object holding the application state")
-    Component(login, "Login form", "React Class", "The login page")
-    Component(profile, "Profile Page", "React Class", "The page where the logged in user can view and edit his/her information")
+Container(mobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
+ContainerDb(componentDataBase, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
+System(systemWebSocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
+System_Ext(systemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
+System_Ext(systemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
+Container_Boundary(api, "API REST"){
+  Container(AuthController, "Auth Controller", "Component: Spring MVC Rest Controller", "")
+  Container(CampusController, "Campus Controller", "Component: Spring MVC Rest Controller", "")
+  Container(EvaluationController, "Evaluation Controller", "Component: Spring MVC Rest Controller", "")
+  Container(CourseController, "Course Controller", "Component: Spring MVC Rest Controller", "")
+  Container(ProfessorController, "Professor Controller", "Component: Spring MVC Rest Controller", "")
+
+  Container(AuthService, "Auth Service", "Component: Spring Service", "")
+  Container(EvaluationService, "Evaluation Service", "Component: Spring Service", "")
+  Container(CourseService, "Course Service", "Component: Spring Service", "")
+  Container(ProfessorService, "Professor Service", "Component: Spring Service", "")
+  Container(MiningService, "Mining Service", "Component: Spring Service", "")
+
+  Container(AuthModel, "Auth Model", "Component: Data Access Object", "")
+  Container(CampusModel, "Campus Model", "Component: Data Access Object", "")
+  Container(ContactModel, "Contact Model", "Component: Data Access Object", "")
+  Container(CourseModel, "Course Model", "Component: Data Access Object", "")
+  Container(EventModel, "Event Model", "Component: Data Access Object", "")
+  Container(PopularityModel, "Popularity Model", "Component: Data Access Object", "")
+  Container(ProfessorModel, "Professor Model", "Component: Data Access Object", "")
+  Container(RatingModel, "Rating Model", "Component: Data Access Object", "")
+  Container(SisuModel, "Sisu Model", "Component: Data Access Object", "")
+  Container(SocialModel, "Social Model", "Component: Data Access Object", "")
+  Container(SsaModel, "Ssa Model", "Component: Data Access Object", "")
+
+
+    Rel(mobileApp, AuthController, "Makes API calls to", "JSON/HTTP")
+    Rel(mobileApp, CampusController, "Makes API calls to", "JSON/HTTP")
+    Rel(mobileApp, EvaluationController, "Makes API calls to", "JSON/HTTP")
+    Rel(mobileApp, CourseController, "Makes API calls to","JSON/HTTP")
+    Rel(mobileApp, ProfessorController, "")
+
+    Rel(AuthController, AuthService ,"Uses")
+    Rel(CampusController, CourseService ,"Uses" )
+    Rel(EvaluationController, EvaluationService ,"Uses")
+    Rel(CourseController, CourseService ,"Uses")
+    Rel(CourseController, ProfessorService ,"Uses")
+    Rel(ProfessorController, ProfessorService ,"Uses")
+    
+    Rel(AuthService, AuthModel ,"Uses")
+    Rel(CourseService, CampusModel ,"Uses")
+    Rel(CourseService, CourseModel ,"Uses")
+    Rel(CourseService, EventModel ,"Uses")
+    Rel(CourseService, ContactModel ,"Uses")
+    Rel(CourseService, SocialModel ,"Uses")
+    Rel(EvaluationService, CourseModel ,"Uses")
+    Rel(EvaluationService, PopularityModel, "Uses")
+    Rel(EvaluationService, RatingModel, "Uses")
+    Rel(ProfessorService, ProfessorModel ,"Uses")
+    Rel(ProfessorService, CourseModel ,"Uses")
+    Rel(ProfessorService, MiningService ,"Uses")
+
+    Rel(CourseModel, SisuModel, "")
+    Rel(CourseModel, SsaModel, "")
+
+
+    
+    Rel(AuthService, systemEmail,"")
+    Rel(AuthService, systemOAuth2,"")
+    Rel(api, systemWebSocket, "")
+    Rel(api, componentDataBase, "")
+
+
+    
 }
 
-Rel(spa, api, "Uses", "JSON/HTTPS")
-
-Rel(login, store, "Uses");
-Rel(routing, store, "Uses");
-Rel(profile, store, "Uses");
 
 @enduml
