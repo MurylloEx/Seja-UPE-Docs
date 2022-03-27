@@ -3,19 +3,57 @@
 
 LAYOUT_WITH_LEGEND()
 
-Container(api, "API Application", "java and Spring MVC", "Delivers the static content and the internet banking single page application.")
+Container(componentApi, "API REST", "NestJS/Node", "Provê as funcionalidades do Seja UPE via uma API JSON/HTTPS.")
+System_Ext(systemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
 
-Container_Boundary(spa, "Single Page Application") {
-    Component(routing, "Routing", "React router", "Handler slient side routing")
-    Component(store, "Data Store", "Redux", "The central object holding the application state")
-    Component(login, "Login form", "React Class", "The login page")
-    Component(profile, "Profile Page", "React Class", "The page where the logged in user can view and edit his/her information")
+Container_Boundary(mobileApp, "Mobile App"){
+    Container(appContext, "App Context", "Component: Context API", "É utilizado para compartilhar e gerenciar o estado para toda a aplicação.")
+ 
+    Container(campusCoursesHook, "Campus courses hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos cursos do campus.")
+    Container(campusEventsHook, "Campus events hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos eventos do campus.")
+    Container(campusContactsHook, "Campus contacts hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos contatos do campus.")
+    Container(campusWithCoursesHook, "Campus with courses hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações do campus e seus cursos.")
+    Container(ratingSurveyHook, "Rating survey hook", "Component: React HTTP request Hook", "Conecta à API para avaliar o teste de aptidão.")
+    Container(popularityCourseHook, "Popularity course hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações referente a popularidade do curso.")
+    Container(professorsHook, "Professors hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos professores.")
+    Container(allCoursesHook, "All courses hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações de todos os cursos.")
+    Container(coursesHook, "Courses hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações de todos os cursos de um campus.")
+    Container(courseProfessorsHook, "Course professors hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos professores de um curso.")
+    Container(googleAuthHook, "Google auth hook", "Component: Expo Google app auth", "Responsável por realizar a autenticação com a conta Google do usuário.")
+
+    Container(screens, "Screens", "Component: React Native JSX", "Todas as telas da aplicação.")
+    Container(components, "Components", "Component: React Native JSX", "Menor parte de uma tela.")
+
+    Rel(screens, campusCoursesHook, "Uses")
+    Rel(screens, campusEventsHook, "Uses")
+    Rel(screens, campusContactsHook, "Uses")
+    Rel(screens, campusWithCoursesHook, "Uses")
+    Rel(screens, ratingSurveyHook, "Uses")
+    Rel(screens, popularityCourseHook, "Uses")
+    Rel(screens, professorsHook, "Uses")
+    Rel(screens, allCoursesHook, "Uses")
+    Rel(screens, coursesHook, "Uses")
+    Rel(screens, courseProfessorsHook, "Uses")
+    Rel(screens, googleAuthHook, "Uses")
+
+    Rel(screens, components, "Uses")
+    Rel(appContext, screens, "Uses")
+
+    Rel(campusCoursesHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+    Rel(campusEventsHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+    Rel(campusContactsHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+    Rel(campusWithCoursesHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+    Rel(ratingSurveyHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+    Rel(popularityCourseHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+    Rel(professorsHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+    Rel(allCoursesHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+    Rel(coursesHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+    Rel(courseProfessorsHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
+
+
+
+    Rel(googleAuthHook, systemOAuth2, "Uses")
 }
 
-Rel(spa, api, "Uses", "JSON/HTTPS")
-
-Rel(login, store, "Uses");
-Rel(routing, store, "Uses");
-Rel(profile, store, "Uses");
 
 @enduml
