@@ -1,0 +1,40 @@
+@startuml "Component Diagram"
+
+title "Diagrama de Componentes do Seja UPE"
+
+interface "ID Token e Access Token do Usuário Google" AS INTERF_GOOGLE_TOKEN
+
+cloud "Seja UPE Infrastructure" as CLOUD_01 {
+
+  component "Google SSO OAuth2 API" as COMP_OAUTH2_API {
+    cloud "Google Cloud Infrastructure" {
+      component "Google SSO Server" as COMP_GOOGLE_SSO_SERVER
+    }
+    component "Google Single Sign-On Expo Library" as COMP_GOOGLE_SSO_EXPO
+    COMP_GOOGLE_SSO_SERVER -0)- COMP_GOOGLE_SSO_EXPO
+  }
+
+  component "Autorização OAuth2" as COMP_OAUTH2_AUTHORIZATION {
+    component "Rota de Autorização" as COMP_OAUTH2_ROUTE
+    component "Controlador do Google SSO" as COMP_SSO_CONTROLLER
+    component "Data Service NestJS" as COMP_OAUTH2_DATA_SERVICE
+    database "Database Module" as COMP_OAUTH2_DATABASE {
+      component "SQLite3 Driver" as COMP_OAUTH2_DATABASE_DRIVER
+    }
+    INTERF_GOOGLE_TOKEN -(0- COMP_OAUTH2_ROUTE
+    COMP_OAUTH2_ROUTE -(0- COMP_SSO_CONTROLLER
+    COMP_SSO_CONTROLLER -down(0- COMP_OAUTH2_DATA_SERVICE
+    COMP_OAUTH2_DATABASE_DRIVER -0)- COMP_OAUTH2_DATA_SERVICE
+    COMP_GOOGLE_SSO_EXPO 0)- COMP_OAUTH2_DATA_SERVICE
+  }
+
+}
+
+note top of INTERF_GOOGLE_TOKEN
+  Esse é o momento onde o usuário 
+  faz a requisição para o serviço 
+  do Google afim de realizar sua 
+  autenticação no aplicativo.
+end note
+
+@enduml

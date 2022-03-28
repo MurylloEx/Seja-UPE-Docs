@@ -1,0 +1,12 @@
+@startuml "Class Diagram"
+
+left to right direction
+
+class CampusNotFoundException extends NotFoundException
+class CourseNotFoundException extends NotFoundException
+class InvalidObjectException extends BadRequestException
+class OutdatedVersionException extends HttpException
+class ServerTimeoutException extends RequestTimeoutException
+class OAuth2UnauthorizedException extends UnauthorizedException
+
+@enduml

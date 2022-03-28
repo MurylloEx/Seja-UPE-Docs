@@ -1,0 +1,29 @@
+@startuml "Class Diagram"
+
+class ServicesModule
+class AuthModule
+class CampusModule
+class DatabaseModule
+class WebsocketModule
+class EvaluationModule
+class CourseModule
+class ProfessorModule
+class AppModule
+
+DatabaseModule <.. AuthModule        : <<dependency>>
+DatabaseModule <.. CampusModule      : <<dependency>>
+DatabaseModule <.. EvaluationModule  : <<dependency>>
+DatabaseModule <.. CourseModule      : <<dependency>>
+DatabaseModule <.. ProfessorModule   : <<dependency>>
+
+AuthModule <.. ServicesModule : <<dependency>>
+CampusModule <.. ServicesModule : <<dependency>>
+EvaluationModule <.. ServicesModule : <<dependency>>
+CourseModule <.. ServicesModule : <<dependency>>
+ProfessorModule <.. ServicesModule : <<dependency>>
+ServicesModule <.. AppModule : <<dependency>>
+WebsocketModule <.right. AppModule : <<dependency>>
+
+
+
+@enduml

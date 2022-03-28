@@ -1,0 +1,26 @@
+@startuml "Activity Diagram"
+
+partition "Visualizar notas de corte de um curso" {
+  start
+  if (Possui conectividade?) then (Possui conexão Wi-Fi)
+    :Entrar usando o Gmail;
+    :Responder questionário;
+    fork
+    :Visualizar cursos horizontalmente;
+    fork again
+    :Visualizar cursos verticalmente;
+    end fork
+    :Exibir cursos mais compatíveis com as escolhas;
+    note right
+      Usuário deverá selecionar curso que mais interessou
+    end note
+    :Selecionar curso;
+    :Carregar detalhes do curso;
+    :Exibir notas de corte;
+    stop
+  else (Sem acesso ao Wi-Fi)
+    end
+  endif
+}
+
+@enduml
