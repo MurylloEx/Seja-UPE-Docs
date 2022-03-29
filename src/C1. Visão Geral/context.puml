@@ -1,6 +1,11 @@
 @startuml Contexto
+
+left to right direction
+
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
+
 LAYOUT_WITH_LEGEND()
+
 title "Seja UPE - Diagrama de contexto do sistema"
 
 Person(personUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")

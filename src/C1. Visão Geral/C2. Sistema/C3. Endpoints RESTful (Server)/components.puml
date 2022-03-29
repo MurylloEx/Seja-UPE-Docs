@@ -1,80 +1,89 @@
-@startuml
+@startuml "C3 Component Diagram"
+
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
 
+skinparam Style strictuml
+
+LAYOUT_LEFT_RIGHT()
 LAYOUT_WITH_LEGEND()
 
 title "Seja UPE - Diagrama de componentes da API Rest"
 
-Container(mobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
-ContainerDb(componentDataBase, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
-System(systemWebSocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
-System_Ext(systemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
-System_Ext(systemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
-Container_Boundary(api, "API REST"){
-  Container(AuthController, "Auth Controller", "Component: Spring MVC Rest Controller", "")
-  Container(CampusController, "Campus Controller", "Component: Spring MVC Rest Controller", "")
-  Container(EvaluationController, "Evaluation Controller", "Component: Spring MVC Rest Controller", "")
-  Container(CourseController, "Course Controller", "Component: Spring MVC Rest Controller", "")
-  Container(ProfessorController, "Professor Controller", "Component: Spring MVC Rest Controller", "")
+Container(MobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
+ContainerDb(Database, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
+System(SystemWebsocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
+System_Ext(SystemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
+System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
 
-  Container(AuthService, "Auth Service", "Component: Spring Service", "")
-  Container(EvaluationService, "Evaluation Service", "Component: Spring Service", "")
-  Container(CourseService, "Course Service", "Component: Spring Service", "")
-  Container(ProfessorService, "Professor Service", "Component: Spring Service", "")
-  Container(MiningService, "Mining Service", "Component: Spring Service", "")
+Container_Boundary(SystemApi, "API REST") {
 
-  Container(AuthModel, "Auth Model", "Component: Data Access Object", "")
-  Container(CampusModel, "Campus Model", "Component: Data Access Object", "")
-  Container(ContactModel, "Contact Model", "Component: Data Access Object", "")
-  Container(CourseModel, "Course Model", "Component: Data Access Object", "")
-  Container(EventModel, "Event Model", "Component: Data Access Object", "")
-  Container(PopularityModel, "Popularity Model", "Component: Data Access Object", "")
-  Container(ProfessorModel, "Professor Model", "Component: Data Access Object", "")
-  Container(RatingModel, "Rating Model", "Component: Data Access Object", "")
-  Container(SisuModel, "Sisu Model", "Component: Data Access Object", "")
-  Container(SocialModel, "Social Model", "Component: Data Access Object", "")
-  Container(SsaModel, "Ssa Model", "Component: Data Access Object", "")
+  Container_Boundary(SystemControllers, "Controllers") {
+    Container(AuthController, "Authentication Controller", "Nest Controller", "")
+    Container(CampusController, "Campus Controller", "Nest Controller", "")
+    Container(EvaluationController, "Evaluation Controller", "Nest Controller", "")
+    Container(CourseController, "Course Controller", "Nest Controller", "")
+    Container(ProfessorController, "Professor Controller", "Nest Controller", "")
 
+    Rel(MobileApp, AuthController, "Makes API calls to", "JSON/HTTP")
+    Rel(MobileApp, CampusController, "Makes API calls to", "JSON/HTTP")
+    Rel(MobileApp, EvaluationController, "Makes API calls to", "JSON/HTTP")
+    Rel(MobileApp, CourseController, "Makes API calls to","JSON/HTTP")
+    Rel(MobileApp, ProfessorController, "Makes API calls to","JSON/HTTP")
+  }
 
-    Rel(mobileApp, AuthController, "Makes API calls to", "JSON/HTTP")
-    Rel(mobileApp, CampusController, "Makes API calls to", "JSON/HTTP")
-    Rel(mobileApp, EvaluationController, "Makes API calls to", "JSON/HTTP")
-    Rel(mobileApp, CourseController, "Makes API calls to","JSON/HTTP")
-    Rel(mobileApp, ProfessorController, "")
-
-    Rel(AuthController, AuthService ,"Uses")
-    Rel(CampusController, CourseService ,"Uses" )
-    Rel(EvaluationController, EvaluationService ,"Uses")
-    Rel(CourseController, CourseService ,"Uses")
-    Rel(CourseController, ProfessorService ,"Uses")
-    Rel(ProfessorController, ProfessorService ,"Uses")
+  Container_Boundary(SystemServices, "Services") {
+    Container(AuthService, "Auth Service", "Nest Service", "")
+    Container(MailerService, "Mailer Service", "Nest Service", "")
+    Container(OAuth2Service, "OAuth2 Service", "Nest Service", "")
+    Container(EvaluationService, "Evaluation Service", "Nest Service", "")
+    Container(CourseService, "Course Service", "Nest Service", "")
+    Container(ProfessorService, "Professor Service", "Nest Service", "")
+    Container(MiningService, "Mining Service", "Nest Service", "")
     
-    Rel(AuthService, AuthModel ,"Uses")
-    Rel(CourseService, CampusModel ,"Uses")
-    Rel(CourseService, CourseModel ,"Uses")
-    Rel(CourseService, EventModel ,"Uses")
-    Rel(CourseService, ContactModel ,"Uses")
-    Rel(CourseService, SocialModel ,"Uses")
-    Rel(EvaluationService, CourseModel ,"Uses")
+    Rel(AuthController, AuthService, "Uses")
+    Rel(CampusController, CourseService, "Uses" )
+    Rel(EvaluationController, EvaluationService, "Uses")
+    Rel(CourseController, CourseService, "Uses")
+    Rel(CourseController, ProfessorService, "Uses")
+    Rel(ProfessorController, ProfessorService, "Uses")
+    Rel(AuthService, MailerService, "Uses")
+    Rel(AuthService, OAuth2Service, "Uses")
+    Rel(ProfessorService, MiningService, "Uses")
+  }
+
+  Container_Boundary(SystemModels, "Models") {
+    Container(AuthModel, "Auth Model", "TypeORM Model", "")
+    Container(CampusModel, "Campus Model", "TypeORM Model", "")
+    Container(ContactModel, "Contact Model", "TypeORM Model", "")
+    Container(CourseModel, "Course Model", "TypeORM Model", "")
+    Container(EventModel, "Event Model", "TypeORM Model", "")
+    Container(PopularityModel, "Popularity Model", "TypeORM Model", "")
+    Container(ProfessorModel, "Professor Model", "TypeORM Model", "")
+    Container(RatingModel, "Rating Model", "TypeORM Model", "")
+    Container(SisuModel, "Sisu Model", "TypeORM Model", "")
+    Container(SocialModel, "Social Model", "TypeORM Model", "")
+    Container(SsaModel, "Ssa Model", "TypeORM Model", "")
+
+    Rel(AuthService, AuthModel, "Uses")
+    Rel(CourseService, CampusModel, "Uses")
+    Rel(CourseService, CourseModel, "Uses")
+    Rel(CourseService, EventModel, "Uses")
+    Rel(CourseService, ContactModel, "Uses")
+    Rel(CourseService, SocialModel, "Uses")
+    Rel(EvaluationService, CourseModel, "Uses")
     Rel(EvaluationService, PopularityModel, "Uses")
     Rel(EvaluationService, RatingModel, "Uses")
-    Rel(ProfessorService, ProfessorModel ,"Uses")
-    Rel(ProfessorService, CourseModel ,"Uses")
-    Rel(ProfessorService, MiningService ,"Uses")
+    Rel(ProfessorService, ProfessorModel, "Uses")
+    Rel(ProfessorService, CourseModel, "Uses")
+    Rel(CourseModel, SisuModel, "Has")
+    Rel(CourseModel, SsaModel, "Has")
+  }
 
-    Rel(CourseModel, SisuModel, "")
-    Rel(CourseModel, SsaModel, "")
+  Rel(MailerService, SystemEmail, "Uses")
+  Rel(OAuth2Service, SystemOAuth2, "Uses")
+  Rel(SystemApi, SystemWebsocket, "Uses")
+  Rel(SystemApi, Database, "Uses")
 
-
-    
-    Rel(AuthService, systemEmail,"")
-    Rel(AuthService, systemOAuth2,"")
-    Rel(api, systemWebSocket, "")
-    Rel(api, componentDataBase, "")
-
-
-    
 }
-
 
 @enduml
