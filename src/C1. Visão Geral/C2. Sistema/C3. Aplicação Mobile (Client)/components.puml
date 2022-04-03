@@ -6,6 +6,8 @@ LAYOUT_WITH_LEGEND()
 Container(componentApi, "API REST", "NestJS/Node", "Provê as funcionalidades do Seja UPE via uma API JSON/HTTPS.")
 System_Ext(systemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
 
+
+
 Container_Boundary(mobileApp, "Mobile App"){
     Container(appContext, "App Context", "Component: Context API", "É utilizado para compartilhar e gerenciar o estado para toda a aplicação.")
  
@@ -52,7 +54,7 @@ Container_Boundary(mobileApp, "Mobile App"){
 
 
 
-    Rel(googleAuthHook, systemOAuth2, "Uses")
+    googleAuthHook ..> systemOAuth2
 }
 
 
