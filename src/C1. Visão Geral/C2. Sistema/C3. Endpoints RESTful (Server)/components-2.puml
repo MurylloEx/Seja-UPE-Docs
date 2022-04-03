@@ -4,7 +4,6 @@
 
 skinparam Style strictuml
 
-LAYOUT_LEFT_RIGHT()
 LAYOUT_WITH_LEGEND()
 
 title "Seja UPE - Diagrama de componentes da API Rest"
@@ -19,15 +18,9 @@ Container_Boundary(SystemApi, "API REST") {
 
   Container_Boundary(SystemControllers, "Controllers") {
     Container(AuthController, "Authentication Controller", "Nest Controller", "")
-    Container(CampusController, "Campus Controller", "Nest Controller", "")
-    Container(EvaluationController, "Evaluation Controller", "Nest Controller", "")
-    Container(CourseController, "Course Controller", "Nest Controller", "")
     Container(ProfessorController, "Professor Controller", "Nest Controller", "")
 
     Rel(MobileApp, AuthController, "Makes API calls to", "JSON/HTTP")
-    Rel(MobileApp, CampusController, "Makes API calls to", "JSON/HTTP")
-    Rel(MobileApp, EvaluationController, "Makes API calls to", "JSON/HTTP")
-    Rel(MobileApp, CourseController, "Makes API calls to","JSON/HTTP")
     Rel(MobileApp, ProfessorController, "Makes API calls to","JSON/HTTP")
   }
 
@@ -35,26 +28,29 @@ Container_Boundary(SystemApi, "API REST") {
     Container(AuthService, "Auth Service", "Nest Service", "")
     Container(MailerService, "Mailer Service", "Nest Service", "")
     Container(OAuth2Service, "OAuth2 Service", "Nest Service", "")
-    Container(EvaluationService, "Evaluation Service", "Nest Service", "")
-    Container(CourseService, "Course Service", "Nest Service", "")
     Container(ProfessorService, "Professor Service", "Nest Service", "")
     Container(MiningService, "Mining Service", "Nest Service", "")
     
     Rel(AuthController, AuthService, "Uses")
-    Rel(CampusController, CourseService, "Uses" )
-    Rel(EvaluationController, EvaluationService, "Uses")
-    Rel(CourseController, CourseService, "Uses")
-    Rel(CourseController, ProfessorService, "Uses")
     Rel(ProfessorController, ProfessorService, "Uses")
     Rel(AuthService, MailerService, "Uses")
     Rel(AuthService, OAuth2Service, "Uses")
     Rel(ProfessorService, MiningService, "Uses")
   }
 
+  Container_Boundary(SystemModels, "Models") {
+    Container(AuthModel, "Auth Model", "TypeORM Model", "")
+    Container(ProfessorModel, "Professor Model", "TypeORM Model", "")
+
+    Rel(AuthService, AuthModel, "Uses")
+    Rel(ProfessorService, ProfessorModel, "Uses")
+  }
+
   Rel(MailerService, SystemEmail, "Uses")
   Rel(OAuth2Service, SystemOAuth2, "Uses")
   Rel(SystemApi, SystemWebsocket, "Uses")
-  Rel(SystemApi, Database, "Uses")
+  Rel(AuthService, Database, "Uses")
+  Rel(ProfessorService, Database, "Uses")
 
 }
 

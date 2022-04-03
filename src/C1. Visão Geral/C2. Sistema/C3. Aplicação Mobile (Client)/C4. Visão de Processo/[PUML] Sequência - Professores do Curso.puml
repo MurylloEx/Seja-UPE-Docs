@@ -1,34 +1,44 @@
-@startuml
+@startuml "Sequence Diagram"
 
-actor "Usuário"
-control "CourseController"
-participant "ProfessorService"
-participant "MiningService"
-entity "Repository<CourseModel>"
-entity "Repository<ProfessorModel>"
+actor "Usuário"                     as USER
+control "CourseController"          as COURSE_CONTROLLER
+participant "ProfessorService"      as PROFESSOR_SERVICE
+participant "MiningService"         as MINING_SERVICE
+entity "Repository<CourseModel>"    as COURSE_REPOSITORY
+entity "Repository<ProfessorModel>" as PROFESSOR_REPOSITORY
 
-"Usuário" -> "CourseController":1.Solicita os professores de um certo curso : onProfessorsRequested
-"CourseController" -> "ProfessorService":1.1.Pesquisa os professores de um determinado curso : fetchCourseProfessors
-"ProfessorService" -> "Repository<CourseModel>":1.1.1.Pesquisa o curso referente ao identificador fornecido pelo usuário : findOne
-"Repository<CourseModel>" -->> "ProfessorService":reply.Retorna o curso solicitado : Promise<CourseModel | null>
-"ProfessorService" -> "ProfessorService":1.1.2.throw new CourseNotFoundExcetion
-"ProfessorService" -> "Repository<ProfessorModel>":1.1.3.Pesquisa no banco de dados todos os professores de um determinado curso : find
-"Repository<ProfessorModel>" -->> "ProfessorService":reply.Retorna os professores encontrados para o curso especificado : Promise<CourseModel[]>
-"ProfessorService" -> "MiningService":1.1.4.Obtém as macroáreas do professor : getShortbioAreas
-"MiningService" -> "MiningService":1.1.4.1.Utiliza uma Expressão Regular (RegExp) para extrair termos chaves (áreas) : match
-"MiningService" -->> "MiningService":reply.Retorna um array de palavras-chave encontradas na shortbio do professor : string[]
-"MiningService" -> "MiningService":1.1.4.2.Percorre todas as palavras-chave do array e as torna minúsculas : map
-"MiningService" -> "MiningService":1.1.4.2.1.Para cada elemento do array transforma em texto minúsculo : toLocaleLowerCase
-"MiningService" -->> "MiningService":reply.Retorna o elemento com o texto em minúsculo : string
-"MiningService" -->> "MiningService":reply.Retorna todas as palavras-chave do array em minúsculo : string[]
-"MiningService" -> "MiningService":1.1.4.3.Filtra todos os elementos repetidos do array : filter
-"MiningService" -->> "MiningService":reply.Retorna um array de palavras-chave únicas : string[]
-"MiningService" -> "MiningService":1.1.4.4.Percorre todas as palavras-chave do array e capitaliza a primeira letra de cada palavra : map
-"MiningService" -> "MiningService":1.1.4.4.1.Transforma as letras iniciais da palavra em maiúsculas : capitalizeString
-"MiningService" -->> "MiningService":reply.Retorna a string com as iniciais capitalizadas : string
-"MiningService" -->> "MiningService":reply.Retorna um array de palavras-chave com as iniciais capitalizadas : string[]
-"MiningService" -->> "ProfessorService":reply.Retorna um array de palavras-chave com as iniciais capitalizadas : string[]
-"ProfessorService" -->> "CourseController":reply.Retorna os professores encontrados para o curso especificado : Promise<CourseModel[]>
-"CourseController" -->> "Usuário":reply.Retorna os professores encontrados para o curso especificado : CourseModel[]
+USER -> COURSE_CONTROLLER : 1. Solicita os professores de um certo curso : onProfessorsRequested()
+COURSE_CONTROLLER -> PROFESSOR_SERVICE : 1.1. Pesquisa os professores de um determinado curso : fetchCourseProfessors()
+PROFESSOR_SERVICE -> COURSE_REPOSITORY : 1.1.1. Pesquisa o curso referente ao identificador fornecido pelo usuário : findOne()
+COURSE_REPOSITORY -->> PROFESSOR_SERVICE : Retorna o curso solicitado : Promise<CourseModel | null>
+alt "findOne() === null" : "Verifica se o curso fornecido existe ou não"
+  PROFESSOR_SERVICE -> PROFESSOR_SERVICE : 1.1.2. throw new CourseNotFoundExcetion
+end
+PROFESSOR_SERVICE -> PROFESSOR_REPOSITORY : 1.1.3. Pesquisa no banco de dados todos os professores de um determinado curso : find()
+PROFESSOR_REPOSITORY -->> PROFESSOR_SERVICE : Retorna os professores encontrados para o curso especificado : Promise<CourseModel[]>
+PROFESSOR_SERVICE -> MINING_SERVICE : 1.1.4. Obtém as macroáreas do professor : getShortbioAreas()
+MINING_SERVICE -> MINING_SERVICE : 1.1.4.1. Utiliza uma Expressão Regular (RegExp) para extrair termos chaves (áreas) : match()
+MINING_SERVICE -->> MINING_SERVICE : Retorna um array de palavras-chave encontradas na shortbio do professor : string[]
+MINING_SERVICE -> MINING_SERVICE : 1.1.4.2. Percorre todas as palavras-chave do array e as torna minúsculas : map()
+MINING_SERVICE -> MINING_SERVICE : 1.1.4.2.1. Para cada elemento do array transforma em texto minúsculo : toLocaleLowerCase()
+MINING_SERVICE -->> MINING_SERVICE : Retorna o elemento com o texto em minúsculo : string
+MINING_SERVICE -->> MINING_SERVICE : Retorna todas as palavras-chave do array em minúsculo : string[]
+MINING_SERVICE -> MINING_SERVICE : 1.1.4.3. Filtra todos os elementos repetidos do array : filter()
+MINING_SERVICE -->> MINING_SERVICE : Retorna um array de palavras-chave únicas : string[]
+MINING_SERVICE -> MINING_SERVICE : 1.1.4.4. Percorre todas as palavras-chave do array e capitaliza a primeira letra de cada palavra : map()
+MINING_SERVICE -> MINING_SERVICE : 1.1.4.4.1. Transforma as letras iniciais da palavra em maiúsculas : capitalizeString()
+MINING_SERVICE -->> MINING_SERVICE : Retorna a string com as iniciais capitalizadas : string
+MINING_SERVICE -->> MINING_SERVICE : Retorna um array de palavras-chave com as iniciais capitalizadas : string[]
+MINING_SERVICE -->> PROFESSOR_SERVICE : Retorna um array de palavras-chave com as iniciais capitalizadas : string[]
+PROFESSOR_SERVICE -->> COURSE_CONTROLLER : Retorna os professores encontrados para o curso especificado : Promise<CourseModel[]>
+COURSE_CONTROLLER -->> USER : Retorna os professores encontrados para o curso especificado : CourseModel[]
+note left
+  O Framework NestJS abstrai as promises e 
+  transforma a resposta em um objeto JSON 
+  trafegável pelo Socket. 
+
+  Nesse caso, onCourseProfessorsRequested 
+  é uma Action do Controller.
+end note
 
 @enduml

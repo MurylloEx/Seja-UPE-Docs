@@ -1,0 +1,31 @@
+@startuml "Component Diagram"
+
+title "Diagrama de Componentes do Seja UPE"
+
+interface "Identificador do Campus" AS INTERF_CAMPUS_ID
+
+cloud "Seja UPE Infrastructure" as CLOUD_02 {
+
+  component "Visualizador de Cursos" as COMP_COURSE_VIEWER {
+    component "Controlador de Cursos" as COMP_COURSES_CONTROLLER
+    component "Data Service NestJS" as COMP_COURSE_VIEWER_DATA_SERVICE
+    component "Rota de Cursos" as COMP_COURSES_ROUTE
+    database "Database Module" as COMP_COURSE_VIEWER_DATABASE {
+      component "SQLite3 Driver" as COMP_COURSE_VIEWER_DATABASE_DRIVER
+    }
+    INTERF_CAMPUS_ID -up(0- COMP_COURSES_ROUTE
+    COMP_COURSES_ROUTE -(0- COMP_COURSES_CONTROLLER
+    COMP_COURSES_CONTROLLER -down(0- COMP_COURSE_VIEWER_DATA_SERVICE
+    COMP_COURSE_VIEWER_DATABASE_DRIVER -0)- COMP_COURSE_VIEWER_DATA_SERVICE
+  }
+
+}
+
+note top of INTERF_CAMPUS_ID
+  Esse é o momento onde o 
+  usuário faz a requisição 
+  para obter a lista de 
+  cursos de um Campus.
+end note
+
+@enduml
