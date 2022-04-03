@@ -1,25 +1,25 @@
-@startuml Contexto
+@startuml "Context Diagram"
 
-left to right direction
+title "Seja UPE - Diagrama de contexto do sistema"
 
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
 
 LAYOUT_WITH_LEGEND()
+LAYOUT_LEFT_RIGHT()
 
-title "Seja UPE - Diagrama de contexto do sistema"
+Person(ActorUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")
 
-Person(personUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")
-System(systemSejaUPE, "Sistema Seja UPE", "O aplicativo Seja UPE, de propósito educativo, informativo e descritivo com forte foco em tornar a Universidade de Pernambuco mais próxima da sociedade, mostrar seus cursos e seu corpo docente de forma mais efetiva para aqueles vestibulandos que necessitem conhecer melhor a universidade.")
-System(systemWebSocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
-System_Ext(systemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
-System_Ext(systemNotification, "Sistema de Notificações", "É responsável por emitir as notificações no smartphone através do Expo Notifications para lembrete de interação com o aplicativo.")
-System_Ext(systemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
+System(SystemSejaUPE, "Sistema Seja UPE", "O aplicativo Seja UPE, de propósito educativo, informativo e descritivo com forte foco em tornar a Universidade de Pernambuco mais próxima da sociedade, mostrar seus cursos e seu corpo docente de forma mais efetiva para aqueles vestibulandos que necessitem conhecer melhor a universidade.")
+System(SystemWebsocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
+System_Ext(SystemSmtp, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
+System_Ext(SystemNotification, "Sistema de Notificações", "É responsável por emitir as notificações no smartphone através do Expo Notifications para lembrete de interação com o aplicativo.")
+System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
 
-Rel(personUser, systemSejaUPE, "Visualiza e interage com as funcionalidades do sistema")
-Rel(systemEmail, personUser, "Manda e-mail para", "SMTP2GO")
-Rel(systemSejaUPE, systemEmail, "Manda e-mail utilizando", "SMTP2GO")
-Rel(systemSejaUPE, systemNotification, "Aplicativo agenda as notificações para aproximadamente 3 horas depois", "Expo Notification")
-Rel(systemSejaUPE, systemWebSocket, "Envie e recebe mensagens", "React Native useWebSocket")
-Rel(systemSejaUPE, systemOAuth2, "Autentica o usuário", "oAuth2")
+Rel(ActorUser, SystemSejaUPE, "Visualiza e interage com as funcionalidades do sistema")
+Rel(SystemSmtp, ActorUser, "Manda e-mail para", "SMTP2GO")
+Rel(SystemSejaUPE, SystemSmtp, "Manda e-mail utilizando", "SMTP2GO")
+Rel(SystemSejaUPE, SystemNotification, "Aplicativo agenda as notificações para aproximadamente 3 horas depois", "Expo Notification")
+Rel(SystemSejaUPE, SystemWebsocket, "Envie e recebe mensagens", "React Native useWebSocket")
+Rel(SystemSejaUPE, SystemOAuth2, "Autentica o usuário", "OAuth2")
 
 @enduml
