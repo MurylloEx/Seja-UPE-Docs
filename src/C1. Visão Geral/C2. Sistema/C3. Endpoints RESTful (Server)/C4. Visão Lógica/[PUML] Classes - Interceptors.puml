@@ -2,6 +2,10 @@
 
 left to right direction
 
+class NestInterceptor {
+  +intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any>
+}
+
 class CacheRequestInterceptor extends CacheInterceptor {
   +trackBy(context: ExecutionContext): string
 }
