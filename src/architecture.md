@@ -5,6 +5,8 @@
 
 ### Principais tecnologias envolvidas
 
+![Diagrama de Definição de Arquitetura](asset_architecture_definition_diagram.png "Diagrama de Definição de Arquitetura")
+
 ### Acrônimos
 
 ### Proposta do sistema

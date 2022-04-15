@@ -1,35 +1,52 @@
 @startuml "C3 Component Diagram"
 
-!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
 skinparam Style strictuml
 
 LAYOUT_WITH_LEGEND()
 
-title "Seja UPE - Diagrama de componentes da API Rest"
+title "Seja UPE - Diagrama de Componentes da API Rest"
 
-Container(MobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
-ContainerDb(Database, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
-System(SystemWebsocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
-System_Ext(SystemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
-System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
+Container(MobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente")
+ContainerDb(Database, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco)")
+System(SystemWebsocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat")
+System_Ext(SystemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO")
+System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google")
 
 Container_Boundary(SystemApi, "API REST") {
 
+  Container_Boundary(SystemInterceptors, "Interceptors") {
+    Component(CacheInterceptor, "Cache Interceptor", "Nest Interceptor", "É responsável por interceptar requisições que chegam ao servidor e verificar se há um cache válido que possa ser utilizado como resposta.")
+    Component(ResponseInterceptor, "Response Interceptor", "Nest Interceptor", "É responsável por interceptar todas as respostas do servidor e padronizar os campos que devem ser expostos como timestamp, códigos de erro e o campo de dados.")
+    Component(TimeoutInterceptor, "Timeout Interceptor", "Nest Interceptor", "É responsável por interceptar todas as requisições e retornar um erro caso não sejam concluídas dentro de um espaço de tempo predefinido de 8 segundos.")
+    Component(VersionInterceptor, "Version Interceptor", "Nest Interceptor", "É responsável por interceptar todas as requisições e verificar se a versão do aplicativo está atualizada, caso contrário, o acesso a API é negado com o status Http Gone.")
+  }
+
   Container_Boundary(SystemControllers, "Controllers") {
-    Container(AuthController, "Authentication Controller", "Nest Controller", "")
-    Container(ProfessorController, "Professor Controller", "Nest Controller", "")
+    Component(AuthController, "Authentication Controller", "Nest Controller", "Traduz a chamada HTTP de autenticação em chamada de serviço de <b>Autenticação</b>.")
+    Component(ProfessorController, "Professor Controller", "Nest Controller", "Traduz a chamada HTTP de solicitação de informações de professores em chamada de serviço de <b>Professores</b>.")
 
     Rel(MobileApp, AuthController, "Makes API calls to", "JSON/HTTP")
     Rel(MobileApp, ProfessorController, "Makes API calls to","JSON/HTTP")
   }
 
+  Container_Boundary(SystemFilters, "Exception Filters") {
+    Component(HttpExceptionFilter, "Http Exception Filter", "Nest Filter", "É o principal manipulador de retornos de exceções de regra de negócio. Captura e expõe todos os erros HTTP amigavelmente.")
+    Component(UnhandledErrorFilter, "Unhandled Error Filter", "Nest Filter", "É o manipulador de retornos de erros de baixo nível. Todos os erros ou exceções não HTTP são manipulados por este filtro e devolvidos amigavelmente.")
+  }
+
+  Container_Boundary(SystemGuards, "Guards") {
+    Component(AuthorizeGuard, "Authorize Guard", "Nest Guard", "É responsável por verificar se o usuário autenticado possui as permissões necessárias para acessar uma determinada rota do sistema.")
+    Component(JwtAuthGuard, "Jwt Auth Guard", "Nest Guard", "É responsavel por verificar e validar a assinatura dos Json Web Tokens recebidos e abrir a sessão internamente no servidor.")
+  }
+
   Container_Boundary(SystemServices, "Services") {
-    Container(AuthService, "Auth Service", "Nest Service", "")
-    Container(MailerService, "Mailer Service", "Nest Service", "")
-    Container(OAuth2Service, "OAuth2 Service", "Nest Service", "")
-    Container(ProfessorService, "Professor Service", "Nest Service", "")
-    Container(MiningService, "Mining Service", "Nest Service", "")
+    Component(AuthService, "Auth Service", "Nest Service", "É responsável por verificar se é o primeiro acesso e enviar e-mails de boas vindas, além de verificar a validade do ID Token e Access Token.")
+    Component(MailerService, "Mailer Service", "Nest Service", "É responsável por envio de e-mails de boas vindas com templates personalizados")
+    Component(OAuth2Service, "OAuth2 Service", "Nest Service", "É responsável pela validação do ID Token e Access Token emitidos pelo Expo Google Auth no aplicativo do usuário.")
+    Component(ProfessorService, "Professor Service", "Nest Service", "É responsável por consultar as informações dos professores, provendo acesso a todos os professores da UPE.")
+    Component(MiningService, "Mining Service", "Nest Service", "É responsável por minerar dados dos currículos LATTES dos professores utilizando expressões regulares.")
     
     Rel(AuthController, AuthService, "Uses")
     Rel(ProfessorController, ProfessorService, "Uses")
@@ -39,8 +56,8 @@ Container_Boundary(SystemApi, "API REST") {
   }
 
   Container_Boundary(SystemModels, "Models") {
-    Container(AuthModel, "Auth Model", "TypeORM Model", "")
-    Container(ProfessorModel, "Professor Model", "TypeORM Model", "")
+    Component(AuthModel, "Auth Model", "TypeORM Model", "Contém a definição da entidade armazenada no banco de dados e seus relacionamentos e o esquema de log dos acessos no aplicativo.")
+    Component(ProfessorModel, "Professor Model", "TypeORM Model", "Contém a definição da entidade armazenada no banco de dados e seus relacionamentos e o esquema dos professores.")
 
     Rel(AuthService, AuthModel, "Uses")
     Rel(ProfessorService, ProfessorModel, "Uses")
@@ -49,8 +66,10 @@ Container_Boundary(SystemApi, "API REST") {
   Rel(MailerService, SystemEmail, "Uses")
   Rel(OAuth2Service, SystemOAuth2, "Uses")
   Rel(SystemApi, SystemWebsocket, "Uses")
-  Rel(AuthService, Database, "Uses")
-  Rel(ProfessorService, Database, "Uses")
+  Rel(SystemServices, Database, "Uses")
+  Rel(SystemControllers, SystemInterceptors, "Uses")
+  Rel(SystemControllers, SystemFilters, "Uses")
+  Rel(SystemControllers, SystemGuards, "Uses")
 
 }
 

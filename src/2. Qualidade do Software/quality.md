@@ -6,4 +6,6 @@
 
 ### 2.4 Abordagem de testes utilizada e como ela impacta na arquitetura
 
+![Ciclo de Vida dos Testes](asset_tests_lifecycle_diagram.png "Ciclo de Vida dos Testes")
+
 ### 2.5 Escolhas tecnológicas e seu impacto na qualidade do software
