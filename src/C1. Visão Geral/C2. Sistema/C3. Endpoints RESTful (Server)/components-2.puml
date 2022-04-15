@@ -6,7 +6,7 @@ skinparam Style strictuml
 
 LAYOUT_WITH_LEGEND()
 
-title "Seja UPE - Diagrama de componentes da API Rest"
+title "Seja UPE - Diagrama de Componentes da API Rest"
 
 Container(MobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
 ContainerDb(Database, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
@@ -16,12 +16,29 @@ System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o u
 
 Container_Boundary(SystemApi, "API REST") {
 
+  Container_Boundary(SystemInterceptors, "Interceptors") {
+    Container(CacheInterceptor, "Cache Interceptor", "Nest Interceptor", "")
+    Container(ResponseInterceptor, "Response Interceptor", "Nest Interceptor", "")
+    Container(TimeoutInterceptor, "Timeout Interceptor", "Nest Interceptor", "")
+    Container(VersionInterceptor, "Version Interceptor", "Nest Interceptor", "")
+  }
+
   Container_Boundary(SystemControllers, "Controllers") {
     Container(AuthController, "Authentication Controller", "Nest Controller", "")
     Container(ProfessorController, "Professor Controller", "Nest Controller", "")
 
     Rel(MobileApp, AuthController, "Makes API calls to", "JSON/HTTP")
     Rel(MobileApp, ProfessorController, "Makes API calls to","JSON/HTTP")
+  }
+
+  Container_Boundary(SystemFilters, "Exception Filters") {
+    Container(HttpExceptionFilter, "Http Exception Filter", "Nest Filter", "")
+    Container(UnhandledErrorFilter, "Unhandled Error Filter", "Nest Filter", "")
+  }
+
+  Container_Boundary(SystemGuards, "Guards") {
+    Container(AuthorizeGuard, "Authorize Guard", "Nest Guard", "")
+    Container(JwtAuthGuard, "Jwt Auth Guard", "Nest Guard", "")
   }
 
   Container_Boundary(SystemServices, "Services") {
@@ -49,8 +66,10 @@ Container_Boundary(SystemApi, "API REST") {
   Rel(MailerService, SystemEmail, "Uses")
   Rel(OAuth2Service, SystemOAuth2, "Uses")
   Rel(SystemApi, SystemWebsocket, "Uses")
-  Rel(AuthService, Database, "Uses")
-  Rel(ProfessorService, Database, "Uses")
+  Rel(SystemServices, Database, "Uses")
+  Rel(SystemControllers, SystemInterceptors, "Uses")
+  Rel(SystemControllers, SystemFilters, "Uses")
+  Rel(SystemControllers, SystemGuards, "Uses")
 
 }
 
