@@ -1,61 +1,54 @@
-@startuml
+@startuml "Component Diagram"
+
+title "Seja UPE - Diagrama de Components Mobile"
+
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
+LAYOUT_LEFT_RIGHT()
 
-Container(componentApi, "API REST", "NestJS/Node", "Provê as funcionalidades do Seja UPE via uma API JSON/HTTPS.")
-System_Ext(systemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
+skinparam Style strictuml
 
+scale 2048 width
+scale 2048 height
 
+Container_Boundary(ContainerMobileApp, "Mobile App") {
+  Component(ComponentAppContext, "App Context", "Component: Context API", "É utilizado para compartilhar e gerenciar o estado para toda a aplicação")
+  Component(ComponentAppPages, "Pages", "Component: React Native JSX", "Todas as páginas da aplicação que o usuário poderá interagir")
+  Component(ComponentAppComponents, "Components", "Component: React Native JSX", "Menor parte de uma tela, constitui os elementos gráficos utilizados nas páginas do Aplicativo")
+  Component(ComponentAppRoutes, "Routes", "Component: React Native JSX", "Rotas da aplicação")
+  Component(ComponentAppThemes, "Themes", "Component: Theme Palettes", "Provê as paletas de cores (Dark ou Light) utilizadas pelos componentes e páginas.")
+  
+  Container_Boundary(ContainerMobileAppHooks, "Hooks") {
+    Component(ComponentAppProfessorsHook, "Professors Hook", "Component: Axios Hook", "Conecta à API para pegar às informações dos professores")
+    Component(ComponentAppGoogleAuthHook, "Google Auth Hook", "Component: Expo Google App auth", "Responsável por realizar a autenticação com a conta Google do usuário")
+    Component(ComponentAppThemeHook, "Theme Hook", "Component: Theme Hook", "Provê acesso ao tema atualmente definido para páginas e componentes.")
+    Component(ComponentAppRequestHook, "Request Hook", "Component: Axios Request Hook", "Permite realizar requisições Http utilizando useRequest e useAuthorizedRequest")
+  }
 
-Container_Boundary(mobileApp, "Mobile App"){
-    Container(appContext, "App Context", "Component: Context API", "É utilizado para compartilhar e gerenciar o estado para toda a aplicação.")
- 
-    Container(campusCoursesHook, "Campus courses hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos cursos do campus.")
-    Container(campusEventsHook, "Campus events hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos eventos do campus.")
-    Container(campusContactsHook, "Campus contacts hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos contatos do campus.")
-    Container(campusWithCoursesHook, "Campus with courses hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações do campus e seus cursos.")
-    Container(ratingSurveyHook, "Rating survey hook", "Component: React HTTP request Hook", "Conecta à API para avaliar o teste de aptidão.")
-    Container(popularityCourseHook, "Popularity course hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações referente a popularidade do curso.")
-    Container(professorsHook, "Professors hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos professores.")
-    Container(allCoursesHook, "All courses hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações de todos os cursos.")
-    Container(coursesHook, "Courses hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações de todos os cursos de um campus.")
-    Container(courseProfessorsHook, "Course professors hook", "Component: React HTTP request Hook", "Conecta à API para pegar às informações dos professores de um curso.")
-    Container(googleAuthHook, "Google auth hook", "Component: Expo Google app auth", "Responsável por realizar a autenticação com a conta Google do usuário.")
-
-    Container(screens, "Screens", "Component: React Native JSX", "Todas as telas da aplicação.")
-    Container(components, "Components", "Component: React Native JSX", "Menor parte de uma tela.")
-
-    Rel(screens, campusCoursesHook, "Uses")
-    Rel(screens, campusEventsHook, "Uses")
-    Rel(screens, campusContactsHook, "Uses")
-    Rel(screens, campusWithCoursesHook, "Uses")
-    Rel(screens, ratingSurveyHook, "Uses")
-    Rel(screens, popularityCourseHook, "Uses")
-    Rel(screens, professorsHook, "Uses")
-    Rel(screens, allCoursesHook, "Uses")
-    Rel(screens, coursesHook, "Uses")
-    Rel(screens, courseProfessorsHook, "Uses")
-    Rel(screens, googleAuthHook, "Uses")
-
-    Rel(screens, components, "Uses")
-    Rel(appContext, screens, "Uses")
-
-    Rel(campusCoursesHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-    Rel(campusEventsHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-    Rel(campusContactsHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-    Rel(campusWithCoursesHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-    Rel(ratingSurveyHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-    Rel(popularityCourseHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-    Rel(professorsHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-    Rel(allCoursesHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-    Rel(coursesHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-    Rel(courseProfessorsHook,componentApi, "Realiza chamada para API", "JSON/HTTP")
-
-
-
-    googleAuthHook ..> systemOAuth2
+  Container_Boundary(ContainerMobileAppServices, "Hook") {
+    Component(ComponentAppHttpService, "Http Service", "Component: Axios Client", "Encapsula e provê o acesso simplificado aos métodos HTTP do Axios Client")
+    Component(ComponentAppOAuth2Service, "OAuth2 Service", "Component: Expo Google Auth", "Encapsula e provê o acesso simplificado à API para exibir o diálogo de Autenticação Google")
+  }
 }
 
+Container(ComponentApi, "API REST", "NestJS/Node", "Provê as funcionalidades do Seja UPE via uma API JSON/HTTPS")
+System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google")
+
+Rel(ComponentAppPages, ComponentAppProfessorsHook, "Uses")
+Rel(ComponentAppPages, ComponentAppGoogleAuthHook, "Uses")
+Rel(ComponentAppPages, ComponentAppComponents, "Uses")
+Rel(ComponentAppPages, ComponentAppContext, "Uses")
+Rel(ComponentAppRoutes, ComponentAppPages, "Uses")
+
+Rel(ComponentAppProfessorsHook, ComponentAppRequestHook, "Uses")
+Rel(ComponentAppGoogleAuthHook, ComponentAppOAuth2Service, "Uses")
+Rel(ComponentAppThemeHook, ComponentAppThemes, "Uses")
+Rel(ComponentAppPages, ComponentAppThemeHook, "Uses")
+Rel(ComponentAppComponents, ComponentAppThemeHook, "Uses")
+Rel(ComponentAppRequestHook, ComponentAppHttpService, "Uses")
+
+Rel(ComponentAppHttpService, ComponentApi, "Realiza chamadas para API", "JSON/HTTPS")
+Rel(ComponentAppOAuth2Service, SystemOAuth2, "Realiza a autenticação Google", "JSON/HTTPS")
 
 @enduml
