@@ -1,6 +1,6 @@
 @startuml "C3 Component Diagram"
 
-!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
 skinparam Style strictuml
 
@@ -9,20 +9,20 @@ LAYOUT_WITH_LEGEND()
 
 title "Seja UPE - Diagrama de Componentes da API Rest"
 
-Container(MobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
-ContainerDb(Database, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
-System(SystemWebsocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
-System_Ext(SystemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
-System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
+Container(MobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente")
+ContainerDb(Database, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco)")
+System(SystemWebsocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat")
+System_Ext(SystemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO")
+System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google")
 
 Container_Boundary(SystemApi, "API REST") {
 
   Container_Boundary(SystemControllers, "Controllers") {
-    Container(AuthController, "Authentication Controller", "Nest Controller", "")
-    Container(CampusController, "Campus Controller", "Nest Controller", "")
-    Container(EvaluationController, "Evaluation Controller", "Nest Controller", "")
-    Container(CourseController, "Course Controller", "Nest Controller", "")
-    Container(ProfessorController, "Professor Controller", "Nest Controller", "")
+    Component(AuthController, "Authentication Controller", "Nest Controller", "Traduz a chamada HTTP de autenticação em chamada de serviço de <b>Autenticação</b>")
+    Component(CampusController, "Campus Controller", "Nest Controller", "Traduz a chamada HTTP de solicitação de informações do Campus em chamada de serviço de <b>Curso</b>")
+    Component(EvaluationController, "Evaluation Controller", "Nest Controller", "Traduz a chamada HTTP de avaliação de cursos e do aplicativo em chamada de serviço de <b>Avaliação</b>")
+    Component(CourseController, "Course Controller", "Nest Controller", "Traduz a chamada HTTP de solicitação de informações de cursos em chamada de serviço de <b>Curso</b>")
+    Component(ProfessorController, "Professor Controller", "Nest Controller", "Traduz a chamada HTTP de solicitação de informações de professores em chamada de serviço de <b>Professores</b>")
 
     Rel(MobileApp, AuthController, "Makes API calls to", "JSON/HTTP")
     Rel(MobileApp, CampusController, "Makes API calls to", "JSON/HTTP")
@@ -32,13 +32,13 @@ Container_Boundary(SystemApi, "API REST") {
   }
 
   Container_Boundary(SystemServices, "Services") {
-    Container(AuthService, "Auth Service", "Nest Service", "")
-    Container(MailerService, "Mailer Service", "Nest Service", "")
-    Container(OAuth2Service, "OAuth2 Service", "Nest Service", "")
-    Container(EvaluationService, "Evaluation Service", "Nest Service", "")
-    Container(CourseService, "Course Service", "Nest Service", "")
-    Container(ProfessorService, "Professor Service", "Nest Service", "")
-    Container(MiningService, "Mining Service", "Nest Service", "")
+    Component(AuthService, "Auth Service", "Nest Service", "É responsável por verificar se é o primeiro acesso e enviar e-mails de boas vindas, além de verificar a validade do ID Token e Access Token")
+    Component(MailerService, "Mailer Service", "Nest Service", "É responsável por envio de e-mails de boas vindas com templates personalizados")
+    Component(OAuth2Service, "OAuth2 Service", "Nest Service", "É responsável pela validação do ID Token e Access Token emitidos pelo Expo Google Auth no aplicativo do usuário")
+    Component(EvaluationService, "Evaluation Service", "Nest Service", "É responsável por processar as avaliações que os usuários fazem do questionário e as avaliações de sugestões de cursos.")
+    Component(CourseService, "Course Service", "Nest Service", "É responsável por consultar as informações dos cursos, provendo acesso a todos os cursos da UPE")
+    Component(ProfessorService, "Professor Service", "Nest Service", "E responsável por consultar as informações dos professores, provendo acesso a todos os professores da UPE")
+    Component(MiningService, "Mining Service", "Nest Service", "E responsável por minerar informações dos currículos LATTES dos professores utilizando expressões regulares")
     
     Rel(AuthController, AuthService, "Uses")
     Rel(CampusController, CourseService, "Uses" )

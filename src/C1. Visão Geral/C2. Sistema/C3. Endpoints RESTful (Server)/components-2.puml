@@ -1,6 +1,6 @@
 @startuml "C3 Component Diagram"
 
-!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
 skinparam Style strictuml
 
@@ -17,36 +17,36 @@ System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o u
 Container_Boundary(SystemApi, "API REST") {
 
   Container_Boundary(SystemInterceptors, "Interceptors") {
-    Container(CacheInterceptor, "Cache Interceptor", "Nest Interceptor", "")
-    Container(ResponseInterceptor, "Response Interceptor", "Nest Interceptor", "")
-    Container(TimeoutInterceptor, "Timeout Interceptor", "Nest Interceptor", "")
-    Container(VersionInterceptor, "Version Interceptor", "Nest Interceptor", "")
+    Component(CacheInterceptor, "Cache Interceptor", "Nest Interceptor", "")
+    Component(ResponseInterceptor, "Response Interceptor", "Nest Interceptor", "")
+    Component(TimeoutInterceptor, "Timeout Interceptor", "Nest Interceptor", "")
+    Component(VersionInterceptor, "Version Interceptor", "Nest Interceptor", "")
   }
 
   Container_Boundary(SystemControllers, "Controllers") {
-    Container(AuthController, "Authentication Controller", "Nest Controller", "")
-    Container(ProfessorController, "Professor Controller", "Nest Controller", "")
+    Component(AuthController, "Authentication Controller", "Nest Controller", "")
+    Component(ProfessorController, "Professor Controller", "Nest Controller", "")
 
     Rel(MobileApp, AuthController, "Makes API calls to", "JSON/HTTP")
     Rel(MobileApp, ProfessorController, "Makes API calls to","JSON/HTTP")
   }
 
   Container_Boundary(SystemFilters, "Exception Filters") {
-    Container(HttpExceptionFilter, "Http Exception Filter", "Nest Filter", "")
-    Container(UnhandledErrorFilter, "Unhandled Error Filter", "Nest Filter", "")
+    Component(HttpExceptionFilter, "Http Exception Filter", "Nest Filter", "")
+    Component(UnhandledErrorFilter, "Unhandled Error Filter", "Nest Filter", "")
   }
 
   Container_Boundary(SystemGuards, "Guards") {
-    Container(AuthorizeGuard, "Authorize Guard", "Nest Guard", "")
-    Container(JwtAuthGuard, "Jwt Auth Guard", "Nest Guard", "")
+    Component(AuthorizeGuard, "Authorize Guard", "Nest Guard", "")
+    Component(JwtAuthGuard, "Jwt Auth Guard", "Nest Guard", "")
   }
 
   Container_Boundary(SystemServices, "Services") {
-    Container(AuthService, "Auth Service", "Nest Service", "")
-    Container(MailerService, "Mailer Service", "Nest Service", "")
-    Container(OAuth2Service, "OAuth2 Service", "Nest Service", "")
-    Container(ProfessorService, "Professor Service", "Nest Service", "")
-    Container(MiningService, "Mining Service", "Nest Service", "")
+    Component(AuthService, "Auth Service", "Nest Service", "")
+    Component(MailerService, "Mailer Service", "Nest Service", "")
+    Component(OAuth2Service, "OAuth2 Service", "Nest Service", "")
+    Component(ProfessorService, "Professor Service", "Nest Service", "")
+    Component(MiningService, "Mining Service", "Nest Service", "")
     
     Rel(AuthController, AuthService, "Uses")
     Rel(ProfessorController, ProfessorService, "Uses")
@@ -56,8 +56,8 @@ Container_Boundary(SystemApi, "API REST") {
   }
 
   Container_Boundary(SystemModels, "Models") {
-    Container(AuthModel, "Auth Model", "TypeORM Model", "")
-    Container(ProfessorModel, "Professor Model", "TypeORM Model", "")
+    Component(AuthModel, "Auth Model", "TypeORM Model", "")
+    Component(ProfessorModel, "Professor Model", "TypeORM Model", "")
 
     Rel(AuthService, AuthModel, "Uses")
     Rel(ProfessorService, ProfessorModel, "Uses")
