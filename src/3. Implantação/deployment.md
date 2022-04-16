@@ -1,5 +1,3 @@
-## 3. Implantação
-
 ### 3.1 Infraestrutura
 
 ### 3.2 Versionamento
