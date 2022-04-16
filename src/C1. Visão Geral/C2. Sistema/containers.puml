@@ -9,18 +9,18 @@ LAYOUT_WITH_LEGEND()
 Person(ActorUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")
 
 Container_Boundary(SystemSejaUPE, "Sistema Seja UPE") {
-  Container(ContainerMobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
-  Container(ContainerServerApi, "API REST", "NestJS/Node", "Provê as funcionalidades do Seja UPE via API JSON/HTTPS.")
-  Container(ContainerDatabase, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
+  Container(ContainerMobileApp, "Aplicativo Móvel", "Container: React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
+  Container(ContainerServerApi, "API REST", "Container: NestJS/Node", "Provê as funcionalidades do Seja UPE via API JSON/HTTPS.")
+  Container(ContainerDatabase, "Banco de Dados", "Container: RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
   
   Rel(ContainerServerApi, ContainerDatabase, "Realiza leitura e armazena dados", "TypeORM")
   Rel(ContainerMobileApp, ContainerServerApi, "Faz uma chamada para API", "JSON/HTTPS")
 }
 
-System(SystemWebsocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
+System(SystemWebsocket, "WebSocket", "É responsável por manter o envio e recebimento de mensagens dentro do chat.")
 System_Ext(SystemSmtp, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
 System_Ext(SystemNotification, "Sistema de Notificações", "É responsável por emitir as notificações no smartphone através do Expo Notifications para lembrar o usuário de interação com o aplicativo.")
-System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
+System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar ao usuário realizar login utilizando sua conta Google.")
 
 Rel(ActorUser, ContainerMobileApp, "Visualiza e interage com as funcionalidades do sistema")
 Rel(ContainerMobileApp, SystemNotification, "Aplicativo agenda as notificações para aproximadamente 3 horas depois", "Expo Notification")
