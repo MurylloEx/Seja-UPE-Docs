@@ -106,20 +106,20 @@ Os Requisitos Arquiteturais são todos os requisitos, sejam eles Funcionais ou N
 | Requisito Arquitetural | Realizar login |
 | Atributo(s) de qualidade relacionados | Compatibilidade e Reusabilidade |
 | Classificação | Essencial |
-| Por que é um Requisito Arquitetural? |  |
-| Decisões arquiteturais que foram tomadas |  |
-| Decisões arquiteturais que vão garantir que esse requisito seja contemplado pela arquitetura |  |
-| Como será realizada a manutenção? |  |
+| Por que é um Requisito Arquitetural? | Foi necessário instalar uma biblioteca (expo-google-app-auth) que fornece integração de autenticação do Google para aplicativos Expo usando um navegador da Web do sistema seguro com arquivos expo-app-auth. Além disso, foi necessário armazenar o token de autenticação no local storage, utilizando o serviço (Session). |
+| Decisões arquiteturais que foram tomadas | O cliente, para realizar o login, é necessário, no aplicativo, utilizar o serviço de SSO (Single Sign-On) do Google, o OAuth2. Isso permite ao usuário ter o acesso geral a todas as funcionalidades do sistema, sendo pré-requisito para acessar todo sistema em si. |
+| Decisões arquiteturais que vão garantir que esse requisito seja contemplado pela arquitetura | Para realizar o login será necessário, obrigatoriamente, utilizar o login com a conta Google. Caso a conta Google não esteja autenticada não será possível acessar o aplicativo utilizando o OAuth2 e, consequentemente, o aplicativo emitirá um alerta de erro indicando que o usuário precisa de uma conta Google. |
+| Como será realizada a manutenção? | Atualizando as dependências da biblioteca utilizada (expo-google-app-auth) para atender ao requisito de autenticação no sistema. Além disso, verificar periodicamente alguma alteração no retorno das API’s. |
 
 | []() | []() |
 | --- | --- |
 | Requisito Arquitetural | Lembrete de teste vocacional |
 | Atributo(s) de qualidade relacionados | Usabilidade |
 | Classificação | Importante |
-| Por que é um Requisito Arquitetural? |  |
-| Decisões arquiteturais que foram tomadas |  |
-| Decisões arquiteturais que vão garantir que esse requisito seja contemplado pela arquitetura |  |
-| Como será realizada a manutenção? |  |
+| Por que é um Requisito Arquitetural? | Foi criado uma regra de negócio no local storage utlizando AsyncStorage (react-native-async-storage), que verifica se o usuário já realizou ou não o preenchimento do teste vocacional. Também, o expo-notificationsfornece uma API para buscar tokens de notificação push e apresentar, agendar, receber e responder a notificações.  |
+| Decisões arquiteturais que foram tomadas | Foi implementado uma condição onde o usuário deverá ser capaz de ser alertado, no intervalo de 3 a 4 horas, sobre o status do preenchimento do seu teste vocacional, com o objetivo de melhorar sua experiência no aplicativo. |
+| Decisões arquiteturais que vão garantir que esse requisito seja contemplado pela arquitetura | Para respeitar a arquitetura imposta, qualquer alteração ou interação com o serviço da notificação deverá ser feita a partir do serviço (Notification) no lado cliente.  |
+| Como será realizada a manutenção? | Mantendo as coordenadas armazenadas na base e atualizando as depências utilizadas para atender este requisito. |
 
 | []() | []() |
 | --- | --- |
