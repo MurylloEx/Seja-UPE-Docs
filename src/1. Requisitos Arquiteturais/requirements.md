@@ -94,7 +94,7 @@ Os Requisitos Arquiteturais são todos os requisitos, sejam eles Funcionais ou N
 | []() | []() |
 | --- | --- |
 | Requisito Arquitetural | Interagir pelo bate-papo |
-| Atributo(s) de qualidade relacionados | Interopelabilidade |
+| Atributo(s) de qualidade relacionados | Interoperabilidade |
 | Classificação | Desejável |
 | Por que é um Requisito Arquitetural? | Houve uma adaptação no back-end, criando um gateway para reaproveitar a porta HTTP aberta e provêr o serviço WebSocket através dela sem a necessidade de abrir uma nova porta para o serviço WebSocket. No front-end, teve que se instalar uma dependência chamada react-native-use-websocket, para se conectar ao servidor, respeitando a arquiteura do React, foi criado um hook personalizado (useChatWebSocket), este hook é quem mantém a conexão do chat aberta. |
 | Decisões arquiteturais que foram tomadas | No back-end o padrão de projeto utilizado para se criar um gateway WebSocket foi o Adapter que envolve um servidor HTTP e o transforma num gateway de WebSocket. Para que o gateway funcione foi utilizado o paradigma de programação orientada a eventos. Já no lado do front-end, para se utilizar o chat houve a introdução de um custom hook que utiliza, em segundo plano, o react-native-use-websocket. |
