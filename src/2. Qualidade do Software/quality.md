@@ -112,7 +112,7 @@ Para que os testes possam ser reproduzidos e seus esultados possam ser analisado
 | Tabela de Riscos | Google Drive | [Acessar](https://abre.ai/dD4s) |
 | Estratégia de Testes | Google Drive | [Acessar](https://abre.ai/dD4t) |
 | Caso de Testes (Código) | MediaFire | [Acessar](https://abre.ai/dD4u) |
-| Caso de Testes (Planilha) | Google Drive | [Acessar](https://abre.ai/dEl9)) |
+| Caso de Testes (Planilha) | Google Drive | [Acessar](https://abre.ai/dEl9) |
 | Relatório de Cobertura de Código | Google Drive | [Acessar](https://abre.ai/dETR) |
 
 > [!NOTE]
@@ -120,3 +120,18 @@ Para que os testes possam ser reproduzidos e seus esultados possam ser analisado
 
 ### 2.5 Escolhas tecnológicas e seu impacto na qualidade do software
 
+No desenvolvimento do **Seja UPE** foram tomados alguns cuidados no que tange a qualidade do software e a capacidade dele ser manutenível a longo prazo. Para que o software pudesse ter um padrão arquitetural consolidado em nível de back-end com as melhores e mais robustas práticas de programação, a escolha tecnológica para desenvolvimento (framework) foi o NestJS. Citando a documentação oficial do NestJS, ela discorre sobre sua filosofia:
+
+>*"In recent years, thanks to Node.js, JavaScript has become the “lingua franca” of the web for both front and backend applications. This has given rise to awesome projects like Angular, React and Vue, which improve developer productivity and enable the creation of fast, testable, and extensible frontend applications. However, while plenty of superb libraries, helpers, and tools exist for Node (and server-side JavaScript), none of them effectively solve the main problem of - Architecture. Nest provides an out-of-the-box application architecture which allows developers and teams to create highly testable, scalable, loosely coupled, and easily maintainable applications. The architecture is heavily inspired by Angular." - NestJS*
+
+> [!WARNING]
+> Para obter mais informações sobre o NestJS, veja a documentação em [NestJS Docs](https://docs.nestjs.com/).
+
+Já no front-end, a tecnologias escolhida sendo o React Native trouxe benefícios quanto a tempo, custo e escopo reduzidos em programação. O React que é a biblioteca base utilizada pelo React Native descreve quais são esses benefícios no desenvolvimento:
+
+>*"React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes. Declarative views make your code more predictable and easier to debug. Build encapsulated components that manage their own state, then compose them to make complex UIs. Since component logic is written in JavaScript instead of templates, you can easily pass rich data through your app and keep state out of the DOM. We don’t make assumptions about the rest of your technology stack, so you can develop new features in React without rewriting existing code. React can also render on the server using Node and power mobile apps using React Native." - ReactJS*
+
+O principal foco do React Native é promover o desenvolvimento de aplicações móveis livres de barreiras, sendo portátil e interoperável em diferentes sistemas operacionais. O maior benefício na qualidade do software está na sua padronização de componentes e na possibilidade de o software ser portável para diferentes dispositivos sem a necessidade de se escrever código equivalente para diferentes sistemas operacionais com diferentes arquiteturas de hardware.
+
+> [!WARNING]
+> Para obter mais informações sobre o ReactJS, veja a documentação em [ReactJS Docs](https://reactjs.org/docs/getting-started.html) e para mais informações sobre o React Native, veja a documentação em [React Native Docs](https://reactnative.dev/docs/getting-started).
