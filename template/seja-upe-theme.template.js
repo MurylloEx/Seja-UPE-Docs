@@ -1,3 +1,20 @@
+const settings = {
+  "flexible-alerts": {
+    note: {
+      label: "Nota"
+    },
+    tip: {
+      label: "Informação"
+    },
+    warning: {
+      label: "Aviso"
+    },
+    attention: {
+      label: "Atenção"
+    }
+  }
+}
+
 module.exports = (options) => {
   return `
 <!DOCTYPE html>
@@ -11,8 +28,8 @@ module.exports = (options) => {
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="${options.stylesheet}">
     <style>
-      * {
-        text: justify!important;
+      p, td, th {
+        text-align: justify!important;
       }
       table {
         width: 100%!important;
@@ -24,9 +41,10 @@ module.exports = (options) => {
   <body>
     <div id="app"></div>
     <script>
-      window.$docsify = ${JSON.stringify(options, null, 2)};
+      window.$docsify = ${JSON.stringify({...settings, ...options}, null, 2)};
     </script>
     <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+    <script src="//unpkg.com/docsify-plugin-flexible-alerts"></script>
     <script src="//unpkg.com/docsify-plantuml/dist/docsify-plantuml.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/docsify-darklight-theme@latest/dist/index.min.js"></script>
