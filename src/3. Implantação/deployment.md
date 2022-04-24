@@ -23,6 +23,15 @@ A infraestrutura de rede do sistema **Seja UPE** conta também com outro proxy r
 >[!ATTENTION]
 >Note que muitas hospedagens compartilhadas utilizam desse recurso, como por exemplo o Heroku, Hostinger, Hostgator, entre outros. Por essa razão, há desvantagens significativas do ponto de vista arquitetural, pois se o cliente não estiver utilizando o protocolo HTTP 1.1 ou superior, essa técnica de roteamento não funciona. Dessa forma, não é possível rotear conexões TCP, pois não são acompanhadas de um indicador de cabeçalho Host. Essa técnica restringe o roteamento ao protocolo HTTP 1.1 e superior, bem como Websockets. Conexões TCP feitas diretamente ao endereço de IP do servidor de origem são dropados automaticamente, ocasionando o erro ERR_EMPTY_RESPONSE.
 
+Por trás da API REST tem um banco de dados local, trata-se do SQLite. O SQLite é um banco de dados de arquivo único que não possui o suporte de um Sistema de Gerenciamento de Banco de Dados. Com o SQLite a aplicação insere, atualiza, consulta e apaga dados a qualquer momento utilizando um driver de banco de dados apropriado para Node.js, nesse caso node-sqlite.
+
+>[!TIP]
+>O SQLite é amplamente utilizado no Node.js, o TypeORM utiliza um dos drivers que você instala para se comunicar com o banco de dados, nesse caso o driver é o node-sqlite. Com esse driver o TypeORM consegue interagir com a base abstraindo todas as consultas SQL em relações de composição e herança baseadas no paradigma orientado a objetos. 
+
+Finalizando a visão geral da infraestrutura do sistema, temos a parte que diz respeito ao usuário, seu dispositivo móvel. A aplicação móvel funciona através de um sistema operacional Android, mas devido a escolha da tecnologia de front-end, pode ser facilmente portável para iOS e demais sistemas operacionais. O cliente, que nesse caso está de posse do aparelho, utiliza o sistema que internamente desencadeia, eventualmente, uma série de solicitações através do protocolo HTTP 1.1 ao serviço de API REST. Todas as requisições feitas são stateless, necessitando do Json Web Token recebido no processo de autenticação SSO OAuth2 para manter o servidor ciente da sessão do usuário.
+
+Ao longo desse tópico você pôde entender um pouco da infraestrutura do sistema, desde o hardware envolvido, aos serviços de terceiros na nuvem responsável pela proteção, banco de dados, detalhes de redes de computadores e por fim o hardware e software do usuário final. Nas seções seguintes abordaremos como o versionamento de código é feito utilizando Git, GitHub e GitFlow, assim como algums estratégias de DevOps que foram utilizadas para manter os serviços do Seja UPE, publicação e acesso de desenvolvimento na esteira de desenvolvimento do Expo Go.
+
 ### 3.2 Versionamento
 
 <p align="center">
@@ -69,9 +78,39 @@ O DevOps é a combinação de filosofias culturais, práticas e ferramentas que 
   <img src="asset_github_pipeline_image.png" alt="GitHub Action Pipeline" />
 </p>
 
+```yml
+name: Expo Automatic Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  publish:
+    name: Automatic deploy in Expo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with: 
+          node-version: 14.x
+      - uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: npm install
+      - run: expo publish
+```
+
 #### 3.3.3 Build automático
 
+<p align="center">
+  <img src="asset_github_build_image.png" alt="GitHub Action Pipeline" />
+</p>
+
 #### 3.3.4 Deployment automático
+
+<p align="center">
+  <img src="asset_github_deployment_image.png" alt="GitHub Action Pipeline" />
+</p>
 
 #### 3.3.5 GitHub Webhooks Notifications no Discord
 
