@@ -6,6 +6,8 @@ title "Seja UPE - Diagrama de container do sistema"
 
 LAYOUT_WITH_LEGEND()
 
+skinparam backgroundcolor transparent
+
 Person(ActorUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")
 
 Container_Boundary(SystemSejaUPE, "Sistema Seja UPE") {

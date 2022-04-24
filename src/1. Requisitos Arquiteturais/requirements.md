@@ -120,7 +120,7 @@ Os Requisitos Arquiteturais são todos os requisitos, sejam eles Funcionais ou N
 | Requisito Arquitetural | RF027. Lembrete de teste vocacional |
 | Atributo(s) de qualidade relacionados | Usabilidade |
 | Classificação | Importante |
-| Por que é um Requisito Arquitetural? | Foi criado uma regra de negócio no local storage utlizando AsyncStorage (react-native-async-storage), que verifica se o usuário já realizou ou não o preenchimento do teste vocacional. Também, o expo-notificationsfornece uma API para buscar tokens de notificação push e apresentar, agendar, receber e responder a notificações.  |
+| Por que é um Requisito Arquitetural? | Foi criado uma regra de negócio no local storage utlizando AsyncStorage (react-native-async-storage), que verifica se o usuário já realizou ou não o preenchimento do teste vocacional. Também, o expo-notifications fornece uma API para buscar tokens de notificação push e apresentar, agendar, receber e responder a notificações.  |
 | Decisões arquiteturais que foram tomadas | Foi implementado uma condição onde o usuário deverá ser capaz de ser alertado, no intervalo de 3 a 4 horas, sobre o status do preenchimento do seu teste vocacional, com o objetivo de melhorar sua experiência no aplicativo. |
 | Decisões arquiteturais que vão garantir que esse requisito seja contemplado pela arquitetura | Para respeitar a arquitetura imposta, qualquer alteração ou interação com o serviço da notificação deverá ser feita a partir do serviço (Notification) no lado cliente.  |
 | Como será realizada a manutenção? | Mantendo as coordenadas armazenadas na base e atualizando as depências utilizadas para atender este requisito. |

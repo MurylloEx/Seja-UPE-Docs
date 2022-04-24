@@ -1,13 +1,14 @@
 @startuml "C3 Component Diagram"
 
-!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+title "Seja UPE - Diagrama de Componentes da API Rest"
 
-skinparam Style strictuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
 LAYOUT_LEFT_RIGHT()
 LAYOUT_WITH_LEGEND()
 
-title "Seja UPE - Diagrama de Componentes da API Rest"
+skinparam Style strictuml
+skinparam backgroundcolor transparent
 
 Container(MobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
 ContainerDb(Database, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")

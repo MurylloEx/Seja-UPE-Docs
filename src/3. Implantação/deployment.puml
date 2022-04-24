@@ -7,6 +7,8 @@
 
 LAYOUT_WITH_LEGEND()
 
+skinparam backgroundcolor transparent
+
 Deployment_Node(NODE_SMARTPHONE, "Smartphone do Usuário", "device") {
   Container(NODE_ANDROID, "Android", "Operating System", "Sistema Operacional do Smartphone")
 }

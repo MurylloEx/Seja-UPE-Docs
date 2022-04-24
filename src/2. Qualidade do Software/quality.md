@@ -48,7 +48,7 @@ Os testes de regressão serão feitos usando a ferramenta de teste automatizado 
 | Tempo | Referente ao planejamento do escopo baseando-se no cronograma. | Média | Alto | Manter o cronograma atualizado, incluindo riscos para evitar contratempos tanto no prazo quanto no escopo. |
 
 > [!TIP]
-> Você poderá visualizar outros riscos relacionados ao **Seja UPE** clicando <a href="/asset_requirements_pdf.pdf">aqui</a>.
+> Você poderá visualizar outros riscos relacionados ao **Seja UPE** clicando <a href="https://abre.ai/dD4s">aqui</a>.
 
 #### 2.4.2 Ciclo de Vida nos Testes do Software
 

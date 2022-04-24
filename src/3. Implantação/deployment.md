@@ -1,5 +1,23 @@
 ### 3.1 Infraestrutura
 
+Para que o projeto possa ficar em execução por 24 horas por dia, 7 dias por semana é necessário hospedar o daemon da API REST em um servidor que suporte o Node.js na versão 12 ou superior.<br><br>
+No cenário do **Seja UPE**, o servidor utilizado para hospedagem do sistema foi um servidor de placa única do tipo ASUS Tinkerboard com as seguintes especificações:
+
+- Processador RK3288 Cortex-A17 SoC Quad-core;
+- GPU ARM Mali-T760 MP4;
+- Vídeo HDMI (resolução máxima de 4K) e MIPI DSI de 15 pinos (suporta até HD);
+- Memória Dual Channel LPDDR3 2GB;
+- Armazenamento em MicroSD(TF) de 32GB Sandisk Classe 10;
+- Áudio com Codec RTL ALC4040;
+- 4 Portas USB 2.0;
+- Fonte de alimentação Monkey Business BR de 5 Volts DC/3 Ampères;
+- Dimensões 3.37'' x 2.125'' (8.55cm x 5.4cm).
+
+Além do servidor onde a API REST é hospedada, há um provedor externo de serviço de proteção DDoS e cache com rede AnyCast otimizada para redução de latência e encaminhamento inteligente baseado em geolocalização de resolução DNS, este provedor é o CloudFlare. O CloudFlare age como uma barreira de proteção pois assume o controle do nome de domínio e utiliza **proxies reversos** para filtrar requisições suspeitas e conter ataques de Slow Post, DDoS, SYN Flood, explorações genéricas e injeções de códiggo em geral (principalmente SQL). Dessa forma, quando o usuário se conecta ao **Seja UPE**, na realidade está a se conectar ao servidor proxy do CloudFlare o qual mascara e oculta o real endereço de IP do servidor TinkerBoard.
+
+>[!TIP]
+>Faça o teste você mesmo, execute ``ping -n 1 sejaupe.website`` e veja o endereço de IP retornado. Copie esse endereço de IP e pesquise por ele em um banco de dados Whois e verá que o provedor é o CloudFlare Inc. e não o VcNet, conforme esperado.
+
 ### 3.2 Versionamento
 
 <p align="center">

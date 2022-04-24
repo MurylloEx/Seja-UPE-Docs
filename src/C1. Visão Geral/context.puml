@@ -7,6 +7,8 @@ title "Seja UPE - Diagrama de contexto do sistema"
 LAYOUT_WITH_LEGEND()
 LAYOUT_LEFT_RIGHT()
 
+skinparam backgroundcolor transparent
+
 Person(ActorUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")
 
 System(SystemSejaUPE, "Sistema Seja UPE", "O aplicativo Seja UPE, de propósito educativo, informativo e descritivo com forte foco em tornar a Universidade de Pernambuco mais próxima da sociedade, mostrar seus cursos e seu corpo docente de forma mais efetiva para aqueles vestibulandos que necessitem conhecer melhor a universidade.")

@@ -8,6 +8,7 @@ LAYOUT_WITH_LEGEND()
 LAYOUT_LEFT_RIGHT()
 
 skinparam Style strictuml
+skinparam backgroundcolor transparent
 
 scale 2048 width
 scale 2048 height
