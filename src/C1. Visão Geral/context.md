@@ -43,4 +43,4 @@ Diante disso o “Seja UPE” apresenta-se como um aplicativo mobile que visa di
 
 ### C1.5 Quais são os serviços externos ao sistema?
 
-- Os sistemas externos utilizados no sistema são apenas 4, que são: **Sistema de SSO (oAuth2)**, **WebSocket (React Native useWebSocket)**, **Sistema de notificações (Expo Notification)**, **Sistema de e-mail (SMTP2GO)**
+- Os sistemas externos utilizados no sistema são apenas 4, que são: **Sistema de SSO (OAuth2)**, **WebSocket (React Native useWebSocket)**, **Sistema de notificações (Expo Notification)**, **Sistema de e-mail (SMTP2GO)**
