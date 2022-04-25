@@ -122,11 +122,13 @@ O DevOps é a combinação de filosofias culturais, práticas e ferramentas que 
 
 #### 3.3.1 GitHub Actions Pipelines
 
+Quando um Pull Request é aceito para branch ``main``, as GitHub actions são acionadas no projeto. Para se configurar uma pipeline, ou seja, uma GitHub Action é necessário especificar a branch alvo, a ação que desencadeia a execução da pipeline e os jobs que devem ser realizados. 
+
 <p align="center">
   <img src="asset_github_pipeline_image.png" alt="GitHub Action Pipeline" />
 </p>
 
-Quando um Pull Request é aceito para branch ``main``, as GitHub actions são acionadas no projeto. Para se configurar uma pipeline, ou seja, uma GitHub Action é necessário especificar a branch alvo, a ação que desencadeia a execução da pipeline e os jobs que devem ser realizados. A seguir você verá um exemplo de pipeline no GitHub Actions:
+A seguir você verá um exemplo de pipeline no GitHub Actions:
 
 ```yml
 name: Expo Automatic Deploy
