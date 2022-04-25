@@ -84,7 +84,7 @@ Por último, mas não menos importante, há o segundo padrão de commit chamado 
 - ``test`` (Alterações que adicionam ou modificam testes ou casos de teste).
 
 >[!TIP]
->Um commit realizado no **Seja UPE** com a aderência dos padrões de commit apresentados resulta em algo parecido com: 📝 docs: Updated README informations.
+>Um commit realizado no **Seja UPE** com a aderência dos padrões de commit apresentados resulta em algo parecido com ```📝 docs: Updated README informations.```
 
 ### 3.3 DevOps
 
@@ -126,6 +126,8 @@ O DevOps é a combinação de filosofias culturais, práticas e ferramentas que 
   <img src="asset_github_pipeline_image.png" alt="GitHub Action Pipeline" />
 </p>
 
+Quando um Pull Request é aceito para branch ``main``, as GitHub actions são acionadas no projeto. Para se configurar uma pipeline, ou seja, uma GitHub Action é necessário especificar a branch alvo, a ação que desencadeia a execução da pipeline e os jobs que devem ser realizados. A seguir você verá um exemplo de pipeline no GitHub Actions:
+
 ```yml
 name: Expo Automatic Deploy
 on:
@@ -148,7 +150,15 @@ jobs:
       - run: expo publish
 ```
 
+>[!ATTENTION]
+>A pipeline acima quando entra em execução demora em média 7 minutos para finalizar. Suas ações envolvem: (1) configurar o ambiente do Node.js; (2) baixar as dependências do projeto; (3) compilar e publicar a aplicação na esteira de desenvolvimento do Expo.
+
+>[!NOTE]
+>É importante notar que o processo de compilação do projeto é feito pelo Expo, pois o projeto utiliza o Workflow Managed onde as dependências nativas são geridas pelo Expo. Do ponto de vista arquitetural, isso tira a responsabilidade do programador ter instalado em sua máquina o Android Studio e outras ferramentas de compilação, pois o Expo já realiza esse procedimento.
+
 #### 3.3.3 Build automático
+
+O processo de build dos assets gerenciados, imagens e execução de scripts do lado do TypeScript/JavaScript são realizados na execução do comando ``npm install``. Já a construção do binário APK/AAB utilizado para instalação no aparelho são gerados inteiramente pelo Expo pois as dependências do Android e arquivos Java, Kotlin, Swift, Objective-C são todos retidos pelo Expo. Essa é uma de suas maiores vantagens, por isso parte do processo de build ocorre durante a fase de implantação no Expo. 
 
 <p align="center">
   <img src="asset_github_build_image.png" alt="GitHub Action Pipeline" />
@@ -156,11 +166,15 @@ jobs:
 
 #### 3.3.4 Deployment automático
 
+Essa é a fase onde ocorre de fato a construção do APK/AAB da aplicação. O que ocorre é que, logo após ter sido executado o ``npm install`` do projeto, as dependências Node.js são enviadas para o Expo através de um processo de upload de arquivos automático pela pipeline, onde o Expo constrói os binários multiplataforma, empacota e disponibiliza o acesso tanto na esteira como em seu painel de build. É possível extrair o AAB da build e realizar seu upload na PlayStore sem a necessidade do Android Studio. O equivalente também é possível utilizando o comando ``npm run build``, mas é necessário ter executado o ``npm install`` previamente na máquina de desenvolvimento.
+
 <p align="center">
   <img src="asset_github_deployment_image.png" alt="GitHub Action Pipeline" />
 </p>
 
 #### 3.3.5 GitHub Webhooks Notifications no Discord
+
+Como parte do processo de DevOps, há a coleta de informações após o software estar em execução e no momento do desenvolvimento, para identificar etapas bem-sucedidas e principalmente mal-sucedidas. O Discord atua como um importante aliado nesse aspecto pois permite que seja registrado um Webhook do Discord no GitHub e a cada ação realizada, não apenas em um repositório, mas em toda a organização do GitHub (React Native Group), o Discord é notificado e exibe através do Bot do GitHub informações referentes aquele ocorrido. As mensagens seguem o formato ilustrado na imagem a seguir.
 
 <p align="center">
   <img src="asset_github_discord_webhook_image.png" alt="GitHub Discord Webhook" />
@@ -168,7 +182,32 @@ jobs:
 
 ### 3.4 PlayStore
 
+Um ponto importante para o sucesso do aplicativo e para que ele seja distribuido para o seu devido público é a publicação na PlayStore. O processo é puramente manual e envolve ter uma conta de desenvolvedor Google que custa U$ 25,00 dólares. Para que o aplicativo seja disponibilizado é necessário reservar um namespace único, que nesse caso é ``com.sejaupe.app`` e após reservá-lo, configurar a loja e responder a várias perguntas de segurança. 
+
+>[!NOTE]
+>O processo de validação da PlayStore é criterioso, podendo levar até 7 dias para ser concluído. Esse prazo deve ser levado em mente ao liberar novos aplicativos.
+
+Há perguntas sobre o tipo de atividade exercida, se o aplicativo atrai crianças, se contém disseminação de imagens, se tem interação via bate-papo, se possui manifestação de opinião política ou religiosa, e até mesmo se propaga ideologias que possam ser consideradas inconstitucionais em certos países. Após responder a esse extenso espectro de perguntas, o aplicativo é submetido a uma rede de inteligência artificial que descompila e analisa parte do código-fonte em busca de trojans, vírus ou explorações que possam caracterizar a aplicação como nociva. Se tudo estiver são na aplicação, ela passa para uma etapa de verificação de anúncios, onde um robô acessa a aplicação e procura por monetizadores comuns. Aplicações monetizadas não podem ser direcionadas para crianças. Dado o conjunto de respostas fornecidas e a avaliação da rede de inteligência artificial feita pela Google no aplicativo, ele recebe uma classificação indicativa que determina qual a idade mínima para que o aplicativo possa ser utilizado. Devido ao **Seja UPE** utilizar comunicação via bate-papo, a classificação indicativa recebida foi de ``12 Anos``.
+
+Na PlayStore as atualizações podem ser feitas com praticidade, muito embora o processo de autorização e publicação possa demorar até 48 horas.
+
+>[!ATTENTION]
+>Cada atualização submetida à PlayStore é analisada por uma equipe, por isso o processo pode demorar até 48 horas. Além desse fator, o aplicativo recebe avaliações constantes quanto à detalhes de interface gráfica, responsividade e contrastes de cores que são disponibilizados como relatórios no Google Play Console.
+
+A aplicação se encontra disponível na PlayStore publicamente e o padrão de versão que deve ser adotado é compatível com ``Conventional Commits``. Há uma correlação entre a versão da aplicação e a quantidade de commits do tipo ``fix``, ``feature`` e ``BREAKING CHANGE``, por exemplo.
+
+>[!ATTENTION]
+>Para se manter a consistência da versão exibida na PlayStore a relação entre ``Conventional Commits`` e a versão da aplicação na PlayStore deve ser respeitada.<br>
+>*"Commits do tipo fix devem ser enviados para releases PATCH. Commits do tipo feat devem ser enviados para releases MINOR. Commits com BREAKING CHANGE nas mensagens, independentemente do tipo, devem ser enviados para releases MAJOR." - Conventional Commits*
+
 ### 3.5 Expo Go
+
+Um dos pontos fortes do ``Expo SDK`` é a possibilidade de a aplicação ser testada no Expo GO, um aplicativo para Android e iOS que permite que o desenvolvedor tenha uma visão de Hot Reload enquanto desenvolve o aplicativo sem a necessidade de recompilar o projeto quando alterações são feitas no código-fonte. Para que isso seja possível o desenvolvedor deverá executar o comando ``npm start`` no terminal, dentro do workspace do projeto e então através do Expo GO escanear o QR Code que aparece no próprio terminal ou na aba do navegador que se abrirá em instantes.
+
+Esse tipo de interação com o aplicativo para testes internos também pode ser feito através de uma esteira de publicação no Expo, onde é gerado um QR Code para ser escaneado pelo Expo GO. Essa esteira de publicação é do tipo ``development`` e serve para visualizar pré-releases do aplicativo antes de enviá-los para a PlayStore. Sempre que um Pull Request é aprovado de ``develop`` para ``main`` a pipeline *Automatic deploy in Expo* é acionada e o aplicativo é construído/compilado e então publicado nessa esteira.
+
+>[!TIP]
+>Você pode acessar a esteira de desenvolvimento escaneando o QR Code apresentado abaixo ou acessando a esteira clicando [**aqui**](https://expo.dev/@muryllo/seja-upe-app).
 
 <p align="center">
   <img src="asset_expo_qr_code_image.png" alt="Expo Go QRCode" />
