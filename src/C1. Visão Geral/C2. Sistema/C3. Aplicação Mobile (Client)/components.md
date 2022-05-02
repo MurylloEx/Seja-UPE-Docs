@@ -2,6 +2,60 @@
 
 ### C3.2 Camadas da Aplicação Móvel
 
+Para entender como as camadas funcionam no front-end móvel, precisamos visualizar a sua estrutura de pacotes e então percorrer camada por camada a fim de visualizar o fluxo de um caso de uso complexo. Vejamos como a estrutura de arquivos está dividida:
+
+```
+\ root
+  \-> __mocks__
+  \-> node_modules
+  \-> assets
+  \-> tests
+  \-> src
+    \-> assets
+    \-> core
+      \-> components
+      \-> config
+      \-> hooks
+      \-> providers
+      \-> services
+      \-> themes
+    \-> pages
+    \-> routes
+```
+
+Como você pode ver, há uma pasta src que contém todo o código da aplicação e dentro dela há ramificações de diretórios para ``assets``, ``core``, ``pages`` e ``routes``. Cada diretório desse possui um propósito, veremos todos eles a seguir.
+
+- **assets** - É onde todos os arquivos de recursos visuais (svgs, pngs, jpgs, jpegs, gifs, etc) são armazenados. Essa pasta possui arquivos que que seguem o seguinte padrão de nomenclatura:
+
+  - **Imagens:** ``res_image_name_image.ext``<br>
+  - **Ícones:** ``res_icon_name_icon.ext``<br>
+  - **Logos:** ``res_logo_name_logo.ext``<br>
+  - **Exemplo:** ``res_robot_hand_on_the_waist_icon.png``
+
+  Dentro deste diretório há um arquivo index.tsx que exporta todas as imagens com seus nomes aderentes ao padrão de nome seguinte: 
+
+  ```tsx
+  (...)
+  export const AssetProfessorPhotoIcon            = require("./res_professor_photo_icon.png");
+  export const AssetSocialFacebookIcon            = require("./res_social_facebook_icon.png");
+  export const AssetSocialInstagramIcon           = require("./res_social_instagram_icon.png");
+  export const AssetSocialTwitterIcon             = require("./res_social_twitter_icon.png");
+  export const AssetSocialYoutubeIcon             = require("./res_social_youtube_icon.png");
+  (...)
+  ```
+
+- **core** - É o diretório mais importante da aplicação, onde os serviços, componentes, hooks, providers, temas e a configuração da aplicação são armazenados. Esse diretório se ramifica nos seguintes:
+  - **components** - É o diretório que contém todos os componentes react do sistema;
+  - **config** - É o diretório que contém todos os arquivos JSON com configurações do teste vocacional, das rotas da API;
+  - **hooks** - É o diretório que contém os arquivos que agrupam os Hooks do sistema, sendo divididos por categoria e não por nome;
+  - **providers** - É o diretório que contém os providers do react, que são como componentes mas proporcionam o acesso à API de Contexto do React, sea para tema ou estados globais;
+  - **services** - É um dos diretórios mais importantes, junto dos hooks, é onde se pode encontrar os serviços de requisição, serviços do teste vocacional e notificações do sistema. Tudo que envolve regras de negócio deve estar contido nesse diretório;
+  - **themes** - É um diretório que contém as paletas de cores dos temas disponíveis, atualmente o ``Dark Palette`` e o ``Light Palette``.
+
+- **pages** - É o diretório que contém todas as páginas da aplicação móvel. São ditas como páginas, pois as páginas ocupam parcialmente a área do monitor do dispositivo móvel (excetuando a área da barra de status). Alguns desenvolvedores costumam utilizar o termo **screens** para diferenciar das páginas Web, mas não há nenhum consenso quanto a esse termo;
+
+- **routes** - É o diretório que contém todas as rotas e definições de parâmetros que as páginas recebem. Qualquer alteração no fluxo de exibição das páginas ou a navegação deve ser feita nesse diretório.
+
 #### C3.2.1 Os Hooks
 
 #### C3.2.2 Os Services
