@@ -60,13 +60,13 @@ Como você pode ver, há uma pasta src que contém todo o código da aplicação
 Os hooks são uma abordagem funcional para gestão de estados e adição de efeitos no React. A partir dos hooks é possível criar variáveis que preservam seu valor entre diferentes renderizações (chamadas da função do componente). É importante notar que um componente funcional no React possui uma forma semelhante a seguinte:
 
 ```tsx
-import React, { FunctionalComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 
 export interface MyComponentProps {
   /* Props declaration */
 }
 
-export const MyComponent: FunctionalComponent<MyComponentProps> = () => {
+export const MyComponent: FunctionComponent<MyComponentProps> = () => {
   return (
     <View>
       <Text>Hello World!</Text>
