@@ -57,6 +57,89 @@ Como você pode ver, há uma pasta src que contém todo o código da aplicação
 - **routes** - É o diretório que contém todas as rotas e definições de parâmetros que as páginas recebem. Qualquer alteração no fluxo de exibição das páginas ou a navegação deve ser feita nesse diretório.
 
 #### C3.2.1 Os Hooks
+Os hooks são uma abordagem funcional para gestão de estados e adição de efeitos no React. A partir dos hooks é possível criar variáveis que preservam seu valor entre diferentes renderizações (chamadas da função do componente). É importante notar que um componente funcional no React possui uma forma semelhante a seguinte:
+
+```tsx
+import React, { FunctionalComponent } from 'react';
+
+export interface MyComponentProps {
+  /* Props declaration */
+}
+
+export const MyComponent: FunctionalComponent<MyComponentProps> = () => {
+  return (
+    <View>
+      <Text>Hello World!</Text>
+    </View>
+  );
+}
+```
+
+Dessa forma, quando o componente tem um de seus estados alterado, a função responsável por renderizar o componente é executada novamente e, como é de se advinhar, todas as variáveis seriam redeclaradas e, por fim, teriam seus valores redefinidos. Para resolver esse problema o React introduziu os hooks os quais são amplamente utilizados pelo **Seja UPE**. Há vários hooks que podem ser reaproveitados no **Seja UPE**, são eles:
+
+- ``APIS``
+  - useAuthorize
+  - useCampus
+  - useCampusRef
+  - useCampusCourses
+  - useCampusEvents
+  - useCampusContacts
+  - useCampusWithCourses
+  - useRatingSurvey
+  - usePopularityCourse
+  - useProfessors
+  - useProfessorRef
+  - useAllCourses
+  - useCourses
+  - useCourseProfessors
+
+- ``DADOS DE CAMPUS``
+  - useCampusData
+
+- ``BATE-PAPO``
+  - useChatWebSocket
+
+- ``AVALIAÇÃO DE CURSO/QUESTIONÁRIO``
+  - useEvaluation
+
+- ``ESTADO GLOBAL``
+  - useGlobal
+
+- ``OAUTH2``
+  - useGoogleAuth
+
+- ``LIFECYCLE``
+  - useEnterScreen
+  - useLeaveScreen
+
+- ``HTTP/S``
+  - useRequest
+  - useAuthorizedRequest
+
+- ``INTERFACE GRÁFICA``
+  - usePageScroll
+  - useTheme
+  - useThemeSchema
+
+- ``SESSÃO``
+  - useSession
+  - useIsSessionActive
+
+- ``TESTE VOCACIONAL``
+  - useSurveyResults
+
+Por fim, você pode criar seu próprio Hook, ele deve ter o seguinte formato:
+
+```ts
+export function useMyHook(): string {
+  /* Hooks can use another hooks */
+  /* Hooks must have a name beginning with 'use' */
+  return 'hello world';
+}
+```
+
+> [!ATTENTION]
+> Todos os Hooks do **Seja UPE** devem conter o padrão de nomenclatura **useHookName**. O prefixo **use** é utilizado pelo React para identificar quando uma função é um Hook e deve ser tratado como tal.
 
 #### C3.2.2 Os Services
 
@@ -74,9 +157,9 @@ Como você pode ver, há uma pasta src que contém todo o código da aplicação
 
 #### C3.4.1 Quais camadas devem ser implementadas?
 
-#### C3.4.2 Padrões e convenções de nomenclatura?
+#### C3.4.2 Padrões e convenções de nomenclatura
 
-#### C3.4.3 Padrões de projeto utilizados?
+#### C3.4.3 Padrões de projeto utilizados
 
 - Para nome de variáveis:
   - Camel Case;
@@ -95,5 +178,5 @@ Como você pode ver, há uma pasta src que contém todo o código da aplicação
 - Para commits [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/) em conjunto com o [Gitmoji](https://gitmoji.dev/).
 - O conventional commits ainda entra em congruência com o padrão de versionamento semantic versioning, visto que o número dos tipos de commits (ex.: feat, fix, chore e etc.) influenciará no número da versão. Mais detalhes sobre isso pode ser visto no [seguinte link](https://www.conventionalcommits.org/pt-br/v1.0.0/#qual-a-rela%C3%A7%C3%A3o-com-o-semver);
 
-#### C3.4.4 Módulos e serviços disponíveis para utilização?
+#### C3.4.4 Módulos e serviços disponíveis para utilização
 
