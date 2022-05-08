@@ -143,7 +143,111 @@ export function useMyHook(): string {
 
 #### C3.2.2 Os Services
 
+Os serviços são uma espécie de componente do sistema. Não se tem uma definição formal do que vem a ser um serviço na aplicação móvel do **Seja UPE** mas se entende como serviço qualquer arquivo que exporte classes, funções e principalmente métodos que contenham regras de negócio ou facilitadores para se implementar um caso de uso. No **Seja UPE** há 4 serviços principais que são utilizados pelos Hooks, componentes e em raras circunstâncias pelas páginas.
+
+- ``Http Service``<br>
+  Exporta as funcionalidades de ``GET``, ``POST``, ``PUT``, ``DELETE`` que são utilizadas pelos hooks de requisição HTTP, principalmente o ``useRequest``.
+
+- ``Notification Service``<br>
+  Exporta as funcionalidades de envio de notificações através de um objeto ``Notification`` quee contém os seguintes métodos:
+  - ``init``: Que é responsável por inicializar o serviço de notificação e a definir se há ou não som, badge da notificação, entre outras configurações;
+  - ``schedule``: Que é responsável por agendar a notificação para uma data específica;
+  - ``listen``: Que coloca o aplicativo/dispositivo em estado alertável para receber notificações externas (via push).
+
+- ``OAuth2 Service``<br>
+  Exporta a função de realizar a autenticação com o Google Single Sign-On chamada ``OAuth2LoginAsync``.
+
+- ``Survey Service``<br>
+  Exporta a função de realizar a contabilização dos pontos do teste vocacional e retornar os resultados do teste vocacional através, respectivamente, de ``sumSurveyValues`` e ``getSurveyResults``.
+
+Criar novos serviços é uma tarefa fácil, felizmente, pois pode ser feito criando um arquivo no pacote ``src.core.services`` contendo uma estrutura similar a seguinte:
+
+``MyServiceName.ts``
+```ts
+export function myServiceFunction1() {
+  /* Business rules and operations */
+}
+
+export function myServiceFunction2() {
+  /* Business rules and operations */
+}
+```
+
+Para finalizar a criação do serviço uma diretiva de exportação deve ser adicionada no arquivo ``index.tsx`` contendo uma referência para o serviço criado. Em outras palavras, cada serviço deve exportar suas funções e objetos de forma não-default e, por fim, deve ser incluído  um ``export * from './MyServiceName'`` no final do arquivo ``index.tsx`` mencionado.
+
+> [!ATTENTION]
+> O estilo de exportação das funções, objetos e demais recursos deve ser feita através da palavra reservada ``export`` sem acompanhar a palavra reservada ``default`` pois a exportação ``default`` impedirá a junção da exportação da função em um único ``export`` no arquivo ``index.tsx`` residente no pacote ``src.core.services``. Essa decisão arquitetural foi tomada visando permitir que vários serviços possam ser importados utilizando um único ``import``.
+
 #### C3.2.3 Os Componentes
+
+Os componentes são uma parte importante e fundamental da aplicação móvel **Seja UPE** pois permitem que as páginas do sistema possam ser escritas como composições de componentes ou partes menores de uma página, sendo eles reaproveitáveis entre si. Uma parte da página pode ser utilizada em vários lugares diferentes, como por exemplo o cabeçalho. No **Seja UPE** há **45** componentes disponíveis para uso, sendo eles os seguintes:
+
+- ``Accordion``: Sanfona de informações usada em cursos e nos campus.
+- ``Avatar``: Um componente que exiba uma foto (robozinho ou a de um professor, por exemplo) em um componente arredondado.
+- ``Badge``: Tag usada em cards de professores, áreas e até no chat.
+- ``Button``: Um botão genérico utilizado nas páginas com interação.
+- ``ButtonCourse``: Botão do curso que fica na lista de cursos do Campus.
+- ``ButtonEvent``: Botão do evento que fica na lista de eventos do Campus.
+- ``ButtonGoogle``: Botão de login com o OAuth2 da Google.
+- ``ButtonLattes``: Botão para abrir o currículo Lattes do professor.
+- ``ButtonLink``: Botão usado para abrir links como e-mails, contato, etc.
+- ``ButtonSocial``: Botão utilizado para redes sociais do Campus.
+- ``ButtonStep``: Botão de avançar/voltar utilizado em telas como a do questionário.
+- ``ButtonSuggestion``: Botão de sugestão de curso que contém o nome do curso dentro.
+- ``ButtonWidget``: Botão do tipo Widget para o menu superior em Campus e Cursos.
+- ``CardBaloon``: Card para utilizar falas como as do robô mascote do aplicativo.
+- ``CardBaloonBottom``: Card para utilizas falas apontando para a parte de cima onde fica o robô mascote do aplicativo.
+- ``CardConcurrency``: Card contendo as notas de corte e a maior nota do curso para a modalidade de ampla concorrência.
+- ``CardCourse``: Card de curso que fica no topo da página de um Curso.
+- ``CardProfessor``: Card de informações básicas de um professor.
+- ``CardSuggestion``: Card contendo uma sugestão de curso, incluindo o percentual de relação com o perfil do usuário.
+- ``CardVacancy``: Card contendo o número de vagas ofertadas para o curso.
+- ``Carousel``: Um paginador/carrossel em bolinhas para a página Welcome.
+- ``Chart``: Um gráfico genérico que será utilizado na página de evolução de concorrência.
+- ``DividerConcurrency``: Divisória da página de Notas de Corte.
+- ``Header``: Cabeçalho padrão do aplicativo.
+- ``HorizontalContent``: Componente utilizado para organizar horizontalmente os elementos gráficos como numa linha.
+- ``MapView``: Mapa Google usado para apresentar a localização do Campus.
+- ``Messages``: Mensagem enviada ou recebida no bate-papo do aplicativo.
+- ``ModalChat``: Modal que exibe o bate-papo para o usuário.
+- ``ModalEvaluation``: Modal para realizar a avaliação do questionário e do curso sugerido.
+- ``ModalWebView``: Modal para exibir uma página dentro de uma WebView no aplicativo.
+- ``MultiSlider``: Um componente de Multi Slider Range para delimitar as notas do vestibular como filtro.
+- ``PageLayout``: Componente genérico que representa o layout de uma página (com bordas, cabeçalhos padrões).
+- ``Paragraph``: Um componente de parágrafo com uma tipografia padrão (cor, tamanho, nome da fonte, etc).
+- ``Progress``: Uma barra de progresso usada no teste vocacional para indicar quantas perguntas já foram feitas.
+- ``Radio``: Um componente para selecionar uma única opção dente várias opções.
+- ``Render``: Um componente de estrutura de controle para renderizar condicionalmente outros componentes.
+- ``Select``: Um componente para selecionar um único valor dentre várias opções.
+- ``Spacer``: Um componente de espaçamento para ser utilizado de forma vertical ou horizontal nas páginas.
+- ``Title``: Um título padrão de página.
+- ``TitleOutline``: Um título customizado de página podendo ter um sublinhado, imagem ou fonte diferente.
+- ``ToggleGroup``: Um componente Toggle (Switch) para alternar entre a modalidade SISU e SSA.
+- ``ToggleView``: Um componente Toggle (Switch) para alternar entre o modo de visualização em lista horizontal e vertical.
+- ``VerticalContent``: Componente utilizado para organizar verticalmente os elementos gráficos como numa coluna.
+
+Criar um componente é uma tarefa fácil, felizmente, pois você precisará criar um arquivo no pacote ``src.core.components`` e adicionar o código a seguir:
+
+```tsx
+import React, { Fragment, FunctionComponent } from "react";
+import { Text } from "react-native";
+
+export interface MyComponentProps {
+  /* Props declaration */
+}
+
+//The component should be a FunctionComponent.
+export const MyComponent: FunctionComponent<MyComponentProps> = () => {
+  return (
+    <Fragment>
+      <Text>Hello world from Seja UPE!</Text>
+    </Fragment>
+  );
+}
+```
+
+> [!ATTENTION]
+> Pelo mesmo motivo que os serviços, você deverá criar um componente e exportá-lo utilizando a palavra reservada ``export`` sem acompanhar ``default``. Essa decisão foi tomada visando permitir que vários componentes possam ser importados utilizando uma única diretiva ``import``.
 
 #### C3.2.4 As Páginas
 
