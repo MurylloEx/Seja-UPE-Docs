@@ -340,7 +340,92 @@ Criar providers não é uma tarefa muito comum depois que já se tem um conjunto
 
 #### C3.2.6 Os Themes
 
+Os Temas da aplicação são, na realidade, paletas de cores envolvidas por um objeto fortemente tipado no TypeScript. Uma paleta de cor ou tema é definido de acordo com a seguinte estrutura:
 
+```ts
+export interface ThemeValue {
+  schemaName: string;
+  blue: string;
+  blueNeon: string;
+  red: string;
+  black: string;
+  yellow: string;
+  gray: string;
+  white: string;
+  whiteSmoke: string;
+  evaluationColor: string;
+  textColor: string;
+  concurrencyGreen: string;
+  concurrencyRed: string;
+  chartDatasetColor: string;
+  chartGradientFrom: string;
+  chartGradientTo: string;
+  chartColor: string;
+  chartLabelColor: string;
+  chartDotColor: string;
+  chatOwnTextColor: string;
+  chatOwnBackgroundColor: string;
+  chatTextColor: string;
+  chatTextBackgroundColor: string;
+  chatBackgroundColor: string;
+}
+```
+
+Os temas podem ser utilizados e acessados a partir do Hook de tema ``useTheme`` ou ``useThemeSchema``. Estes dois hooks permitem que os componentes obtenham as cores para, por exemplo, o vermelho do tema atual, o cinza, e assim por diante. A maioria dos componentes do **Seja UPE** utiliza o hook ``useTheme`` para adaptar a sua visualização aos aspectos daquele tema, vejamos um exemplo prático:
+
+```tsx
+export interface AvatarProps {
+  source: ImageSourcePropType;
+  diameter: number;
+  padding?: number;
+  style?: StyleProp<ViewStyle>;
+}
+
+export const Avatar: FunctionComponent<AvatarProps> = ({ source, diameter, style, padding = 4 }) => {
+  const [theme] = useTheme();
+
+  return (
+    <Container style={style} diameter={diameter + padding} {...theme}>
+      <Image diameter={diameter} source={source} resizeMode="cover" {...theme}/>
+    </Container>
+  );
+}
+```
+
+Criar uma nova paleta de cores é uma tarefa fácil, felizmente, pois tudo o que o programador deverá fazer é criar um arquivo no pacote ``src.core.themes`` com o padrão de nomenclatura ``palette-name.palette.tsx`` e exportar um objeto contendo a definição da paleta de cores. A seguir podemos ver um exemplo de uma paleta de cores:
+
+``ocean.palette.tsx``
+```ts
+export const OceanPalette = {
+  schemaName:               "ocean",
+  blue:                     "#324A76", 
+  blueNeon:                 "#1ED8D8", 
+  red:                      "#ED3237", 
+  black:                    "#252525", 
+  yellow:                   "#FFE60A", 
+  gray:                     "#C4C4C4", 
+  white:                    "#FFFFFF", 
+  whiteSmoke:               "#F4F5F8", 
+  evaluationColor:          "#CBC4CC", 
+  textColor:                "#FFFFFF", 
+  concurrencyGreen:         "#17B41E", 
+  concurrencyRed:           "#D7292D", 
+  chartDatasetColor:        "#ED3238", 
+  chartGradientFrom:        "#F3ECEC", 
+  chartGradientTo:          "#FFFFFF", 
+  chartColor:               "#620101", 
+  chartLabelColor:          "#324A76", 
+  chartDotColor:            "#830408", 
+  chatOwnTextColor:         "#FFFFFF", 
+  chatOwnBackgroundColor:   "#324A76", 
+  chatTextColor:            "#676767", 
+  chatTextBackgroundColor:  "#DBDBDB", 
+  chatBackgroundColor:      "#E4E4E4"  
+}
+```
+
+> [!TIP]
+> Lembre-se, este objeto deve estar em conformidade com o tipo ``ThemeValue``, ou seja, todas as propriedades devem estar presentes e com o tipo compatível, bem como valores definidos. Para modificar o tema atual, basta utilizar o hook ``useTheme`` e através de seu setter definir o tema para a nova paleta de cores criada.
 
 ### C3.3 Quais são as restrições e limitações do projeto e como são contornadas?
 
