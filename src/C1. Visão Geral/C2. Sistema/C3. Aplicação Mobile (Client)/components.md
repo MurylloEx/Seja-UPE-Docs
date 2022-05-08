@@ -251,9 +251,96 @@ export const MyComponent: FunctionComponent<MyComponentProps> = () => {
 
 #### C3.2.4 As Páginas
 
+As páginas são uma outra camada do sistema, responsáveis por intermediar a interação do usuário com o sistema. Cada página possui uma rota interna associada a um componente pois, de fato, páginas também são componentes aos olhos do React Native. Dessa forma, o **Seja UPE** possui um conjunto de páginas as quais implementam seus casos de uso, essas páginas são:
+
+- ``Campus``: Página do campus.
+- ``CampusContact``: Página dos contatos do campus.
+- ``CampusCourses``: Páginas dos cursos do campus.
+- ``CampusEvents``: Páginas dos eventos do campus.
+- ``Course``: Página do curso.
+- ``CourseConcurrency``: Página de concorrência do curso.
+- ``CoursePlanning``: Página que contém o planejamento pedagógico do curso.
+- ``CourseProfessor``: Página de um professor específico do curso.
+- ``CourseProfessors``: Página dos professores de um curso.
+- ``SearchResults``: Página de resultados de pesquisa de cursos pela filtragem da tela de sugestões.
+- ``Suggestions``: Página de sugestões de cursos.
+- ``Survey``: Página do testes vocacional.
+- ``Welcome``: Página inicial do aplicativo.
+
+Criar uma página é uma tarefa um pouco mais complicada que criar um componente, é necessário primeiramente:
+
+- Criar o componente da página com a abordagem que o tópico anterior descreve;
+  - O componente da página deve ser criado no pacote ``src.pages`` ao invés de ``src.core.components``, pois este componente é uma página;
+  - O componente da página deve ser exportado no arquivo ``index.tsx`` do pacote ``src.pages``, analogamente ao que é feito com os componentes e serviços;
+- Definir a rota da página para o componente criado.
+  - Cada página deve possuir uma rota associada, essa rota é definida no pacote ``src.routes`` no arquivo ``Stack.tsx``. O componente da página deve ser importado assim como os demais presentes no arquivo e então deve ser criada uma diretiva dentro do ``Stack.Navigator`` conforme a seguir:
+    ```tsx
+    export const StackRoutes: FunctionComponent<StackRoutesProps> = () => {
+      return (
+        <Stack.Navigator
+          initialRouteName="Welcome"
+          screenOptions={{
+            headerShown: false
+          }}
+        >
+          {/*(...)*/}
+          <Stack.Screen 
+            name="MyPage" 
+            component={MyPage} 
+          />
+          {/*(...)*/}
+        </Stack.Navigator>
+      );
+    }
+    ```
+  - Por fim, cada página pode receber propriedades de navegação, os chamados parâmetros de rota. Defini-los é uma tarefa fácil no **Seja UPE** pois há um espaço predefinido também no pacote ``src.routes`` no arquivo ``Types.tsx``. Este é o arquivo onde os tipos dos parâmetros de rotas são especificados. Veja o exemplo a seguir:
+    ```tsx
+    import { DrawerNavigationProp } from "@react-navigation/drawer"
+    import { MyPage } from "../core/hooks";
+
+    export type RoutesParamList = {
+      //(...)
+      MyPage: any;
+      //(...)
+    }
+
+    type ParameterizedRoute<T extends keyof RoutesParamList> = DrawerNavigationProp<RoutesParamList, T>;
+
+    //(...)
+    export type MyPageNavigationProp           = ParameterizedRoute<"MyPage">;
+    //(...)
+    ```
+
+    > [!ATTENTION]
+    > Conforme observado anteriormente, há um padrão tanto de criação do componente da página, como do nome da página, o nome da sua propriedade de navegação e a forma de definir os tipos dos parâmetros de rota. Seguir estes padrões é fundamental para manter a arquitetura ao longo das iterações futuras.
+
 #### C3.2.5 Os Providers
 
+Os providers são importantes aliados na arquitetura do **Seja UPE** pois permitem que alguns Hooks possam utilizar o mais novo conceito no React, a **Context API**. A API de Contexto, assim também chamada, é o que permite que diferentes componentes e páginas possam utilizar estados globais na aplicação sem necessitar utilizar o conceito de **Prop Drilling**, o qual aliás é uma péssima prática de programação. Antigamente as aplicações utilizavam o **Prop Drilling** para simular estados globais, tendo que passar setters como propriedade para outros componentes poderem alterar estados de seus componentes ancestrais. O React mudou isso introduzindo o provider.
+
+No **Seja UPE** os providers são usados para basicamente 3 situações:
+
+- **Memória volátil de estados globais;**
+- **Manutenção de sessão volátil;**
+- **Aplicação de temas nas páginas e componentes;**
+
+Há dois providers criados para esses propósitos, são eles ``Global.tsx`` e o ``Theme.tsx`` que estão localizados no pacote ``src.core.providers``.
+
+Cada provider possui pelo menos um hook associado que consome ou gere o estado envolvido no provider, vejamos os hooks de cada um dos providers mencionados:
+
+- ``Global.tsx``
+  - ``useGlobal``: responsável por proporcionar um estado global acessível por todas as páginas e componentes do **Seja UPE**;
+    - ``useSession``: responsável por retornar os dados da sessão atual do usuário logado. Este hook utiliza diretamente o ``useGlobal`` por baixo dos panos;
+      - ``useIsSessionActive``: responsável por verificar se o usuário atual possui uma sessão válida ativa. Este hook utiliza diretamente o ``useSession`` e indiretamente o ``useGlobal`` por baixo dos panos;
+- ``Theme.tsx``:  
+  - ``useTheme``: responsável por proporcionar o acesso de leitura e alteração da paleta de cores atualmente definida, disponível para todas as páginas e componentes;
+    - ``useThemeSchema``: responsável por proporcionar o acesso somente leitura ao tema atualmente selecionado. Este hook utiliza diretamente o ``useTheme`` por baixo dos panos;
+
+Criar providers não é uma tarefa muito comum depois que já se tem um conjunto de providers definidos, portanto, não é de interesse da arquitetura envolver a raiz dos componentes em muitos providers. A API de Contexto do React tem uma degradação de desempenho significativa em comparação com outras abordagens de manutenção de estados globais, como por exemplo o Redux. Dessa forma, quanto menos providers envolvendo a aplicação inteira, melhor. **E assim espera-se que continue por um bom tempo!** 
+
 #### C3.2.6 Os Themes
+
+
 
 ### C3.3 Quais são as restrições e limitações do projeto e como são contornadas?
 
