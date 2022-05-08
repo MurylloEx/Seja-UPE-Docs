@@ -1,4 +1,19 @@
-### C3.1 Como foi idealizado o uso do framework NestJS?
+### C3.1 Como foi idealizado o uso do framework Expo com o React Native?
+
+Elaborar um sistema para dispositivos móveis utilizando 4 diferentes linguagens de programação para que sejam minimamente interoperáveis e protáteis não é uma tarefa fácil. Imagine ter que manter 2 projetos separados para Android e iOS, respectivamente, cada um sendo desenvolvido em Java, Kotlin, Objective-C e Swift? O **Seja UPE** foi idealizado para ser potencialmente extensível para outras plataformas, e, para tal, é necessário utilizar uma tecnologia que permita esse intercâmbio utilizando a mesma base de código, esse framework é o **React Native**.
+
+A maioria das aplicações móveis precisa interagir com serviços de baixo nível do sistemaa operacional, como notificações, câmera, microfone, geolocalização, entre outros. Fazer isso a partir do TypeScript não é uma tarefa fácil pois requer uma biblioteca wrapper que forneça uma camada de abstração acessível ao TypeScript para isso. Nesse cenário, quem realiza essa interoperabilidade é o **Expo**. O **Expo** possui uma quantidade enorme de bibliotecas wrappers para acessar os mais comuns casos de uso que envolvem os serviços de baixo nível e ele os disponibiliza como pacotes NPM. Existe bibliotecas para interagir até com a bateria do dispositivo. Há raras situações em que não existe uma biblioteca para utilizar algum recurso nativo a partir do **Expo**, por exemplo, o **bluetooth**.
+
+De forma resumida, o **Seja UPE** foi idealizado para utilizar tecnologias que favoreçam a **produtividade**, **escalabilidade**, **portabilidade** em detrimento do **formalismo** e da **ultra performance**.
+
+- **Como o Expo e o React Native interagem entre si?**<br>
+  O projeto em React Native foi criado e nele instalado o Expo Managed Flow que é um fluxo de desenvolvimento idealizado para não se ter no projeto dependências nativas expostas (Java, Kotlin, Swift, Objective-C). As bibliotecas nativas estão instaladas mas não há um pacote ``android`` ou ``ios`` presente pois o APK é compilado nas nuvens a partir de um processo de build baseada no DevOps descrito na seção 3.2 desta documentação.
+
+- **Como o Expo coopera com a produtividade e a escalabilidade?**<br>
+  Simples, com trabalho já feito e compartilhado. Devido ao seu acervo de bibliotecas prontas e recursos de ícones, plugins e funções ``facade`` disponíveis para realizar certas atividades, não é necessário implementar nada do zero. Com o ``Expo``, por exemplo, é possível resolver o problema da página do aplicativo ficar por baixo da barra de tarefas android pois o **Expo** já possui um componente chamado ``<StatusBar />`` que permite a correção dessa anomalia muito conhecida entre quem programa no android. Além disso, com o **Expo** é muito fácil estender o comportamento do sistema pois ele abstrai muito trabalho permitindo o foco nas regras de negócio e não em como interagir com o sistema operacional subjacente.
+
+- **Como o React Native coopera com a portabilidade?**<br>
+  Manter uma aplicação móvel em uma linguagem de programação é muito mais fácil que manter em 4 outras linguagens diferentes. O **React Native** utiliza uma **JSVM** por baixo dos panos para interpretar o código **JavaScript** na bundle final e fazer uma ponte com o mundo nativo **Java**. Graças a essa tecnologia, o código **JavaScript** gerado pelo **React Native** pode rodar em diferentes sistemas operacionais desde que haja uma **JSVM** para interpretá-lo para **Java**, **Kotlin**, **Swift** ou **Objective-C**.
 
 ### C3.2 Camadas da Aplicação Móvel
 
@@ -300,7 +315,7 @@ Criar uma página é uma tarefa um pouco mais complicada que criar um componente
 
     export type RoutesParamList = {
       //(...)
-      MyPage: any;
+      MyPage: any,
       //(...)
     }
 
