@@ -419,7 +419,7 @@ As camadas que devem ser implementadas para se criar um novo endpoint e, consequ
 3. **Exceptions**<br>
   Durante a implementação dos serviços o programador perceberá que necessitará tratar casos de erros, exceções de negócio e inevitavelmente terá de implementar classes especializadas para representar estas exceções de regra de negócio.
 4. **Validators**<br>
-  Uma vez que as entidades foram devidamente modelladas e os serviços criados, bem como seus desvios condicionais, é o momento de se criar as regras de validação de entradas. Nem sempre podemos receber entidades completas como entrada para processamento de um caso de uso, então criamos entidades modelo desvinculadas do banco de dados conhecidas como validadores, ou popularmente, **Data Transfer Objects**.
+  Uma vez que as entidades foram devidamente modeladas e os serviços criados, bem como seus desvios condicionais, é o momento de se criar as regras de validação de entradas. Nem sempre podemos receber entidades completas como entrada para processamento de um caso de uso, então criamos entidades modelo desvinculadas do banco de dados conhecidas como validadores, ou popularmente, **Data Transfer Objects**.
 5. **Controllers**<br>
   Após definir os critérios de validação de entrada dos dados, chegou o momento de criar os controladores de ações e especificar suas rotas utilizando decoradores e programação orientada a aspectos (AOP).
 6. **Modules**<br>
@@ -430,7 +430,7 @@ As camadas que devem ser implementadas para se criar um novo endpoint e, consequ
 
 #### C3.4.2 Padrões e convenções de nomenclatura
 
-Para auxiliar a separação de responsabilidades, a coesão e a manutenção da arquitetura, as pastas, arquivos, funções e variáveis seguem alguns padrões de nomenclatura. As pastas foram divididas para representar as camadas do software, para isso foram nomeadas como: "controller", "models", "services", etc. Já os arquivos possuem uma estrutura "name.layer.ts", assim um arquivo que armazena as atividades de um controller de professor, por exemplo, terá de ser nomeado "professor.controller.ts". Em relação ao nome das funções e variáveis, recomenda-se a utilização do camelCase, pois ele ajuda a legibilidade. Em todo o sistema (back e front) foram utilizadas as seguintes convenções:
+Para auxiliar a separação de responsabilidades, a coesão e a manutenção da arquitetura, as pastas, arquivos, funções e variáveis seguem alguns padrões de nomenclatura. As pastas foram divididas para representar as camadas do software, para isso foram nomeadas como: ``controller``, ``models``, ``services``, etc. Já os arquivos possuem uma estrutura ``name.layer.ts``, assim um arquivo que armazena as atividades de um controller de professor, por exemplo, terá de ser nomeado ``professor.controller.ts``. Em relação ao nome das funções e variáveis, recomenda-se a utilização do camelCase, pois ele ajuda a legibilidade e é o padrão adotado pelo **Seja UPE** aderente ao **AirBnB JavaScript Code Style**. Em todo o sistema (back e front) foram utilizadas as seguintes convenções:
 
 - **Convenção de Nomenclatura de Arquivos e Diretórios** ([Filenames and File Types | Google Developers](https://developers.google.com/style/filenames));
 - **Convenção de Nomenclatura de Variáveis JavaScript** ([AirBnb Naming Conventions](https://airbnb.io/javascript/#naming-conventions));

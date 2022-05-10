@@ -444,30 +444,50 @@ export const OceanPalette = {
 
 ### C3.3 Quais são as restrições e limitações do projeto e como são contornadas?
 
+As principais limitações e restrições do projeto são impostas devido a questões financeiras, requisitos do cliente, condições de hardware, escopo, tempo e vários outros desafios. A seguir podemos ver algumas dessas limitações e restrições.
+
+- **Restrição**: Uma linguagem de programação única (JavaScript) tanto para backend como para frontend mobile;
+- **Limitação**: O sistema ter que funcionar, de início, somente para android, devido ao alto custo de disponibilização de aplicativo na **Apple Store**;
+  - **Solução**: Para contornar esta limitação o usuário poderá acessar o aplicativo em modo de pré-release/desenvolvimento através do **QR Code** gerado pelo **Expo**;
+- **Limitação**: Não é possível interagir com o código nativo em Java/Kotlin pois o **Expo** incorpora esses arquivos apenas em tempo de compilação, por consequência, não é possível compilar localmente o **APK** ou a **bundle**;
+  - **Solução**: Utilizar o serviço de compilação do **Expo** nas nuvens, isso fará o processo de compilação da forma mais prática possível;
+
 ### C3.4 Implementando uma nova funcionalidade respeitando a arquitetura
+
+Para se implementar uma nova funcionalidade você deverá seguir o fluxo de implementação habitual de um caso de uso no front-end. Primeiro mapear seus serviços, hooks que irão consumir esses serviços e traduzir as regras de negócio e chamadas de processamento de dados em chamadas compatíveis com o paradigma funcional, depois os componentes gráficos deverão ser modelados para compor as partes das páginas do usuário e por fim as rotas de navegação e definição dos tipos de propriedades de navegação das páginas devem ser especificados no pacote ``src.routes`` a fim de tornar acessível as páginas e expor suas funcionalidades. Nos tópicos a seguir você verá como realizar essa implementação respeitando a arquitetura subjacente ilustrada no diagrama no topo desta página.
 
 #### C3.4.1 Quais camadas devem ser implementadas?
 
+As camadas que devem ser implementadas para se criar um novo caso de uso na aplicação móvel são as seguintes, em ordem de prioridade:
+
+1. **Services**<br>
+  É o primeiro elemento que deve ser pensado em ser implementado no front-end pois serve de base para o processamento dos dados necessários pelo caso de uso e sua realização. Os services devem conter a regra de negócio e a sua manipulação, toda a lógica que diz respeito ao front-end deve ser tratada, em grande parte, nos services. **O foco é na realização do caso de uso em nível de processamento de dados.**
+2. **Hooks**<br>
+  O segundo elemento a ser implementado é o Hook. Os Hooks devem consumir parcial ou totalmente as funcionalidades expostas pelos serviços condizentes com o caso de uso que realizam. Hooks são a forma que o React utiliza para mudar o efeito colateral da renderização de um componente, logo, estão intimamente ligados à interface gráfica. Os Hooks de requisição devem ser implementados primeiro, seguido pelos hooks de interface gráfica e ciclo de vida do componente. Outros Hooks como os de controle de sessão e tema já estão disponíveis e não necessitam de retrabalho por parte do desenvolvedor. **O foco é na regra de negócio.**
+3. **Componentes**<br>
+  Evidentemente nem sempre haverá componentes prontos e disponíveis para a utilização na criação de novas páginas, principalmente se o layout possuir peculiaridades não previstas anteriormente. É papel do desenvolvedor criar os componentes gráficos e lógicos apropriados seguindo a prototipação no **Figma**, com o maior grau de fidelidade possível. Os componentes devem ser implementados utilizando **Styled Components** como biblioteca de estilização ao invés da clássica **React Native Stylesheet**. O **Styled Components** é amplamente adotado pelo **Seja UPE** pois torna muito mais legível para quem realiza a manutenção do sistema compreender o estilo dos componentes. **O foco nesta etapa é em criar os elementos gráficos das páginas.**
+4. **Páginas**<br>
+  Uma vez que os componentes estão prontos, chega a vez da criação das páginas. As páginas são na realidade componentes, como já foi mencionado, e estas páginas são compostas por outros componentes e Hooks. Páginas não devem utilizar serviços diretamente pois isso viola o preceito da imutabilidade na programação funcional ao introduzir chamadas imperativas/procedurais a funções de serviços. **O foco é em construir a interface gráfica.**
+5. **Rotas**<br>
+  Por fim, as páginas precisam de uma rota associada e também de uma definição de tipos de parâmetros de navegação. A página criada deverá ser adicionada no arquivo de rota para navegação em pilha ``Stack.tsx`` presente no pacote ``src.routes``. Uma vez adicionada a rota, certifique-se de que a página adicionada às rotas possua uma definição de propriedades de navegação. **Mesmo que a página não receba nenhum argumento de navegação ou passagem de propriedades, a definição dos tipos de propriedades de navegação deverão existir.**
+
+> [!ATTENTION]
+> Nunca invoque diretamente um serviço a partir de um componente React. As chamadas em estilo procedural quebrarão o princípio da imutabilidade e poderão ocasionar consecutivas chamadas com efeitos colaterais imprevisíveis devido a renderizações e atualizações de estado do componente.
+
 #### C3.4.2 Padrões e convenções de nomenclatura
 
-#### C3.4.3 Padrões de projeto utilizados
+Para auxiliar a separação de responsabilidades, a coesão e a manutenção da arquitetura, as pastas, arquivos, funções e variáveis seguem alguns padrões de nomenclatura. As pastas foram divididas para representar as camadas do software, para isso foram nomeadas como: ``pages``, ``routes``, ``core``, etc. Já os arquivos possuem uma estrutura ``name.tsx``, assim um arquivo que armazena os hooks de requisição, por exemplo, terá de ser nomeado ``Apis.tsx`` e ser. Em relação ao nome das funções e variáveis, recomenda-se a utilização do camelCase, pois ele ajuda a legibilidade e é o padrão adotado pelo **Seja UPE** aderente ao **AirBnB JavaScript Code Style**. Em todo o sistema (back e front) foram utilizadas as seguintes convenções:
 
-- Para nome de variáveis:
-  - Camel Case;
-- Para nome de funções:
-  - Camel Case;
-- Para nome de classes:
-  - Pascal Case;
-- Para nome de pastas:
-  - Uma palavra só toda em minúsculo;
-- Para nome de arquivos:
-  - `<nome do arquivo>.<tipo do arquivo>.<extensão do arquivo>``;
-  - Ex.: `user.model.ts`, `user.service.ts`, `user.guard.ts`;
-- Para código de versionamento:
-  - Foi utilizado semantic versioning, com uma leve alteração do número referente ao patch (ex.: x.y.1); A alteração feita no patch, foi que mesmo aumentada o número referente ao major (ex.: 1.y.z) ou minor (ex.: x.1.z), a patch não era resetada, de acordo como é escrita na documentação do semantic versioning;
-  - O uso do semantic versioning,
-- Para commits [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/) em conjunto com o [Gitmoji](https://gitmoji.dev/).
-- O conventional commits ainda entra em congruência com o padrão de versionamento semantic versioning, visto que o número dos tipos de commits (ex.: feat, fix, chore e etc.) influenciará no número da versão. Mais detalhes sobre isso pode ser visto no [seguinte link](https://www.conventionalcommits.org/pt-br/v1.0.0/#qual-a-rela%C3%A7%C3%A3o-com-o-semver);
+- **Convenção de Nomenclatura de Arquivos e Diretórios** ([Filenames and File Types | Google Developers](https://developers.google.com/style/filenames));
+- **Convenção de Nomenclatura de Variáveis JavaScript** ([AirBnb Naming Conventions](https://airbnb.io/javascript/#naming-conventions));
+- **Convenção de Fluxo de Trabalho Git** ([GitFlow](https://danielkummer.github.io/git-flow-cheatsheet/));
+- **Convenção de Commits** ([Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/) e o [Gitmoji](https://gitmoji.dev/));
+- **Versionamento de Software - Com adaptações e aderência parcial** ([Semantic Versioning](https://semver.org/));
+
+> [!TIP]
+> Para obter maiores informações sobre o padrão de nomenclatura de arquivos e classes das camadas citadas, visite os tópicos anteriores e veja mais informações a respeito de cada uma das camadas.
+
+#### C3.4.3 Padrões de projeto utilizados
 
 #### C3.4.4 Módulos e serviços disponíveis para utilização
 
