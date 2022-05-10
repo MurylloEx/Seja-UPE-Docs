@@ -394,13 +394,13 @@ export class WebSockGateway implements OnGatewayConnection, OnGatewayDisconnect 
 
 As principais limitações e restrições do projeto são impostas devido a questões financeiras, requisitos do cliente, condições de hardware, escopo, tempo e vários outros desafios. A seguir podemos ver algumas dessas limitações e restrições.
 
-- **Restrição**: Uma linguagem de programação única (JavaScript) tanto para backend como para frontend mobile;
 - **Limitação**: O sistema ter que funcionar, de início, somente para android, devido ao alto custo de disponibilização de aplicativo na **Apple Store**;
   - **Solução**: Para contornar esta limitação o usuário poderá acessar o aplicativo em modo de pré-release/desenvolvimento através do **QR Code** gerado pelo **Expo**;
 - **Limitação**: Todas as fontes de dados são coletadas manualmente, devido a não existência de uma API pública para a extração dos dados dos cursos, professores e demais envolvidos;
   - **Solução**: Para contornar este problema todos os dados tiveram de ser extraídos manualmente através de planilhas XLSX e sites da universidade por meio de uma força-tarefa com 4 pessoas envolvidas a fim de paralelizar a coleta dos dados;
 - **Limitação**: Por motivos de interoperabilidade com dispositivos móveis, deve-se utilizar um dos seguintes protocolos para comunicação: HTTP, HTTPS, WebSocket (WS) WebSocket Secure (WSS), sem recorrer a protocolos como TCP/UDP diretamente, pois não são suportados com pouco esforço;
   - **Solução**: Para resolver este problema os protocolos HTTP, HTTPS, WS e WSS devem ser utilizados a fim de manter a compatibilidade com aplicações móveis;
+- **Restrição**: Uma linguagem de programação única (JavaScript) tanto para backend como para frontend mobile;
 - **Restrição**: Os dados devem ser serializados em JSON ou XML para facilitar a transferência, consumo e o tráfego de dados. O formato de tráfego de dados padrão do mercado é o JSON e deve ser adotado nas comunicações pela API;
 - **Restrição**: Deve ser utilizada criptografia nos protocolos de comunicação, para inibir ataques de Sniffing e MITM (Man In The Middle) que possam ser utilizados para ler ou modificar o conteúdo das requisições;
 
@@ -451,8 +451,8 @@ Para auxiliar a separação de responsabilidades, a coesão e a manutenção da 
 - **Strategy**: Este padrão de projeto foi utilizado na autenticação do sistema. A autenticação é uma ação que possui diferentes estratégias no NestJS. A estratégia implementada foi a do Json Web Token. É fácil perceber a aplicação deste padrão de projeto ao abrir o pacote ``src.security.guards``;
 - **Observer**: Este padrão foi utilizado nos interceptadores os permitem inscrever um observador no objeto retornado do tipo ``Observable`` para ser notificado quando a resposta está disponível e, por fim, permitir a sua manipulação;
 - **Interceptor**: Utilizado nativamente pelo NestJS, este padrão foi responsável por implementar o sistema de cache, respostas com formato padronizado, verificar a presença do cabeçalho de versão do aplicativo móvel e implementar a autorização **Json Web Token**;
-- **Pipe and Filters**: Padrão utilizado extensivamente para tratar as exceções globais de regra de negócio e evitar o fenômeno do **código hadouken** ao tratar os erros e fornecer seu retorno apropriado.
-- **Guard**: Padrão de projeto utilizado para proteger rotas com base em classes utilizadas como parâmetros de anotação dos controllers;
+- **Pipe and Filters**: Padrão utilizado extensivamente para tratar as exceções globais de regra de negócio e evitar o fenômeno do **código hadouken** ao tratar os erros e fornecer seu retorno apropriado;
+- **Guard**: Padrão de projeto utilizado para proteger rotas com base em classes utilizadas como parâmetros de anotação dos controllers.
 
 #### C3.4.4 Módulos e serviços disponíveis para utilização
 

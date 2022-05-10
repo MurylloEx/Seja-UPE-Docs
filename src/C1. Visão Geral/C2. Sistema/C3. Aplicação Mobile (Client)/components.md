@@ -446,11 +446,11 @@ export const OceanPalette = {
 
 As principais limitações e restrições do projeto são impostas devido a questões financeiras, requisitos do cliente, condições de hardware, escopo, tempo e vários outros desafios. A seguir podemos ver algumas dessas limitações e restrições.
 
-- **Restrição**: Uma linguagem de programação única (JavaScript) tanto para backend como para frontend mobile;
 - **Limitação**: O sistema ter que funcionar, de início, somente para android, devido ao alto custo de disponibilização de aplicativo na **Apple Store**;
   - **Solução**: Para contornar esta limitação o usuário poderá acessar o aplicativo em modo de pré-release/desenvolvimento através do **QR Code** gerado pelo **Expo**;
 - **Limitação**: Não é possível interagir com o código nativo em Java/Kotlin pois o **Expo** incorpora esses arquivos apenas em tempo de compilação, por consequência, não é possível compilar localmente o **APK** ou a **bundle**;
   - **Solução**: Utilizar o serviço de compilação do **Expo** nas nuvens, isso fará o processo de compilação da forma mais prática possível;
+- **Restrição**: Uma linguagem de programação única (JavaScript) tanto para backend como para frontend mobile;
 
 ### C3.4 Implementando uma nova funcionalidade respeitando a arquitetura
 
@@ -472,7 +472,7 @@ As camadas que devem ser implementadas para se criar um novo caso de uso na apli
   Por fim, as páginas precisam de uma rota associada e também de uma definição de tipos de parâmetros de navegação. A página criada deverá ser adicionada no arquivo de rota para navegação em pilha ``Stack.tsx`` presente no pacote ``src.routes``. Uma vez adicionada a rota, certifique-se de que a página adicionada às rotas possua uma definição de propriedades de navegação. **Mesmo que a página não receba nenhum argumento de navegação ou passagem de propriedades, a definição dos tipos de propriedades de navegação deverão existir.**
 
 > [!ATTENTION]
-> Nunca invoque diretamente um serviço a partir de um componente React. As chamadas em estilo procedural quebrarão o princípio da imutabilidade e poderão ocasionar consecutivas chamadas com efeitos colaterais imprevisíveis devido a renderizações e atualizações de estado do componente.
+> Nunca invoque diretamente um serviço a partir de um componente React. As chamadas em estilo procedural quebraram o princípio da imutabilidade e poderem ocasionar consecutivas chamadas com efeitos colaterais imprevisíveis devido a renderizações e atualizações de estado do componente.
 
 #### C3.4.2 Padrões e convenções de nomenclatura
 
