@@ -392,13 +392,71 @@ export class WebSockGateway implements OnGatewayConnection, OnGatewayDisconnect 
 
 ### C3.3 Quais são as restrições e limitações do projeto e como são contornadas?
 
+As principais limitações e restrições do projeto são impostas devido a questões financeiras, requisitos do cliente, condições de hardware, escopo, tempo e vários outros desafios. A seguir podemos ver algumas dessas limitações e restrições.
+
+- **Restrição**: Uma linguagem de programação única (JavaScript) tanto para backend como para frontend mobile;
+- **Limitação**: O sistema ter que funcionar, de início, somente para android, devido ao alto custo de disponibilização de aplicativo na **Apple Store**;
+  - **Solução**: Para contornar esta limitação o usuário poderá acessar o aplicativo em modo de pré-release/desenvolvimento através do **QR Code** gerado pelo **Expo**;
+- **Limitação**: Todas as fontes de dados são coletadas manualmente, devido a não existência de uma API pública para a extração dos dados dos cursos, professores e demais envolvidos;
+  - **Solução**: Para contornar este problema todos os dados tiveram de ser extraídos manualmente através de planilhas XLSX e sites da universidade por meio de uma força-tarefa com 4 pessoas envolvidas a fim de paralelizar a coleta dos dados;
+- **Limitação**: Por motivos de interoperabilidade com dispositivos móveis, deve-se utilizar um dos seguintes protocolos para comunicação: HTTP, HTTPS, WebSocket (WS) WebSocket Secure (WSS), sem recorrer a protocolos como TCP/UDP diretamente, pois não são suportados com pouco esforço;
+  - **Solução**: Para resolver este problema os protocolos HTTP, HTTPS, WS e WSS devem ser utilizados a fim de manter a compatibilidade com aplicações móveis;
+- **Restrição**: Os dados devem ser serializados em JSON ou XML para facilitar a transferência, consumo e o tráfego de dados. O formato de tráfego de dados padrão do mercado é o JSON e deve ser adotado nas comunicações pela API;
+- **Restrição**: Deve ser utilizada criptografia nos protocolos de comunicação, para inibir ataques de Sniffing e MITM (Man In The Middle) que possam ser utilizados para ler ou modificar o conteúdo das requisições;
+
 ### C3.4 Implementando uma nova funcionalidade respeitando a arquitetura
+
+Para se implementar uma nova funcionalidade você deverá seguir o fluxo de implementação habitual de um caso de uso no back-end. Primeiro é necessário identificar suas entidades envolvidas, depois mapear seus serviços, regras de validação de entrada, controladores e por fim agrupar todos os elementos do domínio da funcionalidade em um módulo que possa ser importado no módulo raiz chamado ``AppModule``. Nos tópicos a seguir você verá como realizar essa implementação respeitando a arquitetura subjacente ilustrada no diagrama no topo desta página.
 
 #### C3.4.1 Quais camadas devem ser implementadas?
 
+As camadas que devem ser implementadas para se criar um novo endpoint e, consequentemente, um caso de uso no lado do back-end são as seguintes, em ordem de prioridade:
+
+1. **Modelo/Entidades**<br>
+  Uma funcionalidade geralmente está envolvida com a modelagem de entidades na base de dados, sendo o primeiro elemento a ser implementado.
+2. **Serviços**<br>
+  Após a modelagem, deve ser criado os serviços pois o NestJS já fornece uma implementação genérica de repositório para qualquer modelo, bastando apenas injetá-lo utilizando o ``@InjectRepository()``.
+3. **Exceptions**<br>
+  Durante a implementação dos serviços o programador perceberá que necessitará tratar casos de erros, exceções de negócio e inevitavelmente terá de implementar classes especializadas para representar estas exceções de regra de negócio.
+4. **Validators**<br>
+  Uma vez que as entidades foram devidamente modelladas e os serviços criados, bem como seus desvios condicionais, é o momento de se criar as regras de validação de entradas. Nem sempre podemos receber entidades completas como entrada para processamento de um caso de uso, então criamos entidades modelo desvinculadas do banco de dados conhecidas como validadores, ou popularmente, **Data Transfer Objects**.
+5. **Controllers**<br>
+  Após definir os critérios de validação de entrada dos dados, chegou o momento de criar os controladores de ações e especificar suas rotas utilizando decoradores e programação orientada a aspectos (AOP).
+6. **Modules**<br>
+  Por fim, mas não menos importante, no **Seja UPE** geralmente cada controlador está associado a um serviço que está associado a uma entidade e todos esses 3 elementos estão agrupados em um módulo. O **NestJS**, assim como o **Angular** trabalham com o conceito de módulos e por fim são exportados para o módulo raiz conhecido como ``AppModule``. Violar esse padrão faria com que o módulo raiz ficasse sobrecarregado de importações de muitos domínios diferentes. Consulte o tópico **C3.2.6** para entender sobre os módulos do **NestJS**.
+
+> [!ATTENTION]
+> Veja na prática o código-fonte de uma série de funcionalidades implementadas acessando a [API Docs Seja UPE](https://apidocs.sejaupe.website/).
+
 #### C3.4.2 Padrões e convenções de nomenclatura
+
+Para auxiliar a separação de responsabilidades, a coesão e a manutenção da arquitetura, as pastas, arquivos, funções e variáveis seguem alguns padrões de nomenclatura. As pastas foram divididas para representar as camadas do software, para isso foram nomeadas como: "controller", "models", "services", etc. Já os arquivos possuem uma estrutura "name.layer.ts", assim um arquivo que armazena as atividades de um controller de professor, por exemplo, terá de ser nomeado "professor.controller.ts". Em relação ao nome das funções e variáveis, recomenda-se a utilização do camelCase, pois ele ajuda a legibilidade. Em todo o sistema (back e front) foram utilizadas as seguintes convenções:
+
+- **Convenção de Nomenclatura de Arquivos e Diretórios** ([Filenames and File Types | Google Developers](https://developers.google.com/style/filenames));
+- **Convenção de Nomenclatura de Variáveis JavaScript** ([AirBnb Naming Conventions](https://airbnb.io/javascript/#naming-conventions));
+- **Convenção de Fluxo de Trabalho Git** ([GitFlow](https://danielkummer.github.io/git-flow-cheatsheet/));
+- **Convenção de Commits** ([Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/) e o [Gitmoji](https://gitmoji.dev/));
+- **Versionamento de Software - Com adaptações e aderência parcial** ([Semantic Versioning](https://semver.org/));
+
+> [!TIP]
+> Para obter maiores informações sobre o padrão de nomenclatura de arquivos e classes das camadas citadas, visite os tópicos anteriores e veja mais informações a respeito de cada uma das camadas.
 
 #### C3.4.3 Padrões de projeto utilizados
 
+- **Decorator**: Utilizado extensivamente por todas as classes do sistema, controlers, services, modules, etc;
+- **Adapter**: Utilizado pelo Gateway websocket para envolver a instância do servidor HTTP e retornar uma instância de Gateway WebSocket a partir da insância HTTP. Esse comportamento é feito a partir da classe ``WsAdapter``;
+- **Builder**: Este padrão foi utilizado em conjunto com o encadeamento de métodos ou **Method Chaining** para tornar mais legível e elegante a instanciação de classes utilizando o padrão **fluent interface** que permite criar um objeto como se estivesse falando (uma espécie de DSL);
+- **Prototype**: Amplamente utilizado internamente pelo NestJS para realizar modificação de objetos, modelos de instâncias e aplicação de metadados a partir dos decoradores;
+- **Factory Method**: É utilizado amplamente nos módulos para criá-los dinamicamente. Um exemplo de sua aplicabilidade está nos métodos ``forRoot`` presentes em alguns módulos;
+- **Strategy**: Este padrão de projeto foi utilizado na autenticação do sistema. A autenticação é uma ação que possui diferentes estratégias no NestJS. A estratégia implementada foi a do Json Web Token. É fácil perceber a aplicação deste padrão de projeto ao abrir o pacote ``src.security.guards``;
+- **Observer**: Este padrão foi utilizado nos interceptadores os permitem inscrever um observador no objeto retornado do tipo ``Observable`` para ser notificado quando a resposta está disponível e, por fim, permitir a sua manipulação;
+- **Interceptor**: Utilizado nativamente pelo NestJS, este padrão foi responsável por implementar o sistema de cache, respostas com formato padronizado, verificar a presença do cabeçalho de versão do aplicativo móvel e implementar a autorização **Json Web Token**;
+- **Pipe and Filters**: Padrão utilizado extensivamente para tratar as exceções globais de regra de negócio e evitar o fenômeno do **código hadouken** ao tratar os erros e fornecer seu retorno apropriado.
+- **Guard**: Padrão de projeto utilizado para proteger rotas com base em classes utilizadas como parâmetros de anotação dos controllers;
+
 #### C3.4.4 Módulos e serviços disponíveis para utilização
 
+Para visualizar quais módulos e serviços estão disponíveis para utilização no **Seja UPE**, criamos uma documentação completa e detalhada de todos os módulos, serviços, dependências, entidades, controladores, guardas, classes, etc. Acesse a [API Docs Seja UPE](https://apidocs.sejaupe.website/).
+
+> [!ATTENTION]
+> Visualize todos os módulos e serviços disponíveis acessando [API Docs Seja UPE](https://apidocs.sejaupe.website/).
