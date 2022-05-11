@@ -9,7 +9,7 @@ A escolha do **React Native**, como framework para desenvolvimento da aplicaçã
 
 - Ferramenta de desenvolvimento multi-plataforma, podendo ser utilizada tanto para desenvolver aplicações móveis (Android e iOS), desktop ou web;
 - Bases de códigos unificadas. A base de código que será utilizada para as diferentes plataformas será a mesma, podendo ser customizadas, caso seja necessário. Visto, que o **React Native** deixa visível o código nativo para que o desenvolvedor possa realizar qualquer alteração.
-- Uso de JavaScript (Ou o superset TypeScript), linguagem amplamente utilizada e consagrada no mercado de desenvolvimento web;
+- Uso de JavaScript (ou o superset TypeScript), linguagem amplamente utilizada e consagrada no mercado de desenvolvimento web;
 - Uso da biblioteca React para construções de UI o que permite reaproveitamento de conhecimentos do desenvolvimento web com ReactJS;
 
 Já a escolha do **NestJS**, como framework para desenvolvimento de todo o backend da aplicação se deve pelos seguintes pontos:
