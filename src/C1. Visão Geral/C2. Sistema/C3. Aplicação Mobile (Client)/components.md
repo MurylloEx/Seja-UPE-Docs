@@ -489,5 +489,17 @@ Para auxiliar a separação de responsabilidades, a coesão e a manutenção da 
 
 #### C3.4.3 Padrões de projeto utilizados
 
+- **MVS (Model, View, Service) pattern**: Padrão utilizado como uma adaptação do padrão MVC;
+- **Service pattern**: Padrão utilizado para: envolver regras de negócio, definir o formato das requisições HTTP e também definir de que forma o cliente deverá se autenticar;
+- **React Provider pattern**: Padrão utilizado para realizar a gestão de informações dentro do cliente, evitando prop-drilling;
+- **Hook pattern**: Padrão amplamente utilizado para a reutilização de lógica entre os hooks components do React;
+- **Conditional Rendering**: É um padrão de escrita de condicionais de renderização, já que o React não suporta ``ifs`` em sua composição **jsx**/**tsx**. Dessa forma, são utilizados operadores ternários com a operação booleana de curto-circuito.
+
 #### C3.4.4 Módulos e serviços disponíveis para utilização
 
+O **Seja UPE** expõe exatos 4 serviços, 2 providers, 29 hooks, 43 componentes, 36 ícones e recursos visuais além de 57 testes unitários implementados distribuídos em 42 suites de testes. Para mais informações sobre cada um dos serviços e módulos disponíveis no front-end, verifique os tópicos anteriores para obter maiores detalhes.
+
+Se você estiver interessado em visualizar quais módulos e serviços estão disponíveis para utilização no **Seja UPE**, criamos uma documentação completa e detalhada de todos os módulos, serviços, dependências, entidades, controladores, guardas, classes, etc. Acesse a [API Docs Seja UPE](https://apidocs.sejaupe.website/).
+
+> [!ATTENTION]
+> Visualize todos os módulos e serviços disponíveis acessando [API Docs Seja UPE](https://apidocs.sejaupe.website/).
