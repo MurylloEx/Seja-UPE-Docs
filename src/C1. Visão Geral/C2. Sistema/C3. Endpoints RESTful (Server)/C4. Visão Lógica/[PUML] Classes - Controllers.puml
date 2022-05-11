@@ -1,0 +1,61 @@
+@startuml "Class Diagram"
+
+title "Diagrama de Classes - Controladores"
+
+class AuthController {
+  -authService: AuthService
+  +onAuthRequested(body: AuthorizationValidator): Promise<{ bearer: string; payload: TokenPayload; }>
+}
+
+class CampusController {
+  -courseService: CourseService
+  +onAllCampusRequested(): Promise<CampusModel[]>
+  +onAllCampusWithCoursesRequested(): Promise<CampusModel[]>
+  +onCampusRequested(campusId: number): Promise<CampusModel[]>
+  +onCampusCoursesRequested(campusId: number): Promise<CourseModel[]>
+  +onCampusEventsRequested(campusId: number): Promise<EventModel[]>
+  +onCampusContactsRequested(campusId: number): Promise<ContactModel[]>
+}
+
+class CourseController {
+  -courseService: CourseService
+  -professorService: ProfessorService
+  +onAllCoursesRequested(): Promise<CourseModel[]>
+  +onCourseRequested(campusId: number): Promise<CourseModel[]>
+  +onProfessorsRequested(courseId: number): Promise<ProfessorModel[]>
+}
+
+class EvaluationController {
+  -evaluationService: EvaluationService
+  +onRatingSent(note: number): Promise<RatingModel>
+  +onPopularitySent(data: PopularityValidator): Promise<PopularityModel>
+  +onRatingsRequested(): Promise<{ average: number; total: number; }>
+  +onPopularityRequested(courseId: number): Promise<PopularityInfo>
+}
+
+class ProfessorController {
+  -professorService: ProfessorService
+  +onProfessorsRequested(): Promise<ProfessorModel[]>
+  +onProfessorRequested(professorId: number): Promise<ProfessorModel>
+}
+
+AuthController --> "1" AuthService
+AuthController --> "1" AuthorizationValidator
+CampusController --> "1" CourseService
+CampusController --> "*" CampusModel
+CampusController --> "*" CourseModel
+CampusController --> "*" EventModel
+CampusController --> "*" ContactModel
+CourseController --> "1" CourseService
+CourseController -left-> "1" ProfessorService
+CourseController --> "*" CourseModel
+CourseController --> "*" ProfessorModel
+EvaluationController --> "1" EvaluationService
+EvaluationController --> "1" RatingModel
+EvaluationController --> "1" PopularityValidator
+EvaluationController --> "1" PopularityModel
+ProfessorController --> "1" ProfessorService
+ProfessorController --> "*" ProfessorModel
+ProfessorController --> "1" ProfessorModel
+
+@enduml

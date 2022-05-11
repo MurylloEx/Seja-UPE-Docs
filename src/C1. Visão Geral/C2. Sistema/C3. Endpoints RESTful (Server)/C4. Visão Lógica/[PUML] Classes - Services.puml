@@ -1,0 +1,86 @@
+@startuml "Class Diagram"
+
+title "Diagrama de Classes - Serviços"
+
+left to right direction
+
+class CourseService {
+  -campus: Repository<CampusModel>
+  -course: Repository<CourseModel>
+  -event: Repository<EventModel>
+  -contact: Repository<ContactModel>
+  -social: Repository<SocialModel>
+  +fetchCourses(): Promise<CourseModel[]>
+  +fetchCampus(campusId?: number): Promise<CampusModel[]>
+  +fetchCampusWithCourses(): Promise<CampusModel[]>
+  +fetchCampusCourses(campusId: number, includeProfessors?: boolean): Promise<CourseModel[]>
+  +fetchCampusEvents(campusId: number): Promise<EventModel[]>
+  +fetchCampusContacts(campusId: number): Promise<ContactModel[]>
+  +fetchCampusSocialNetworks(campusId: number): Promise<SocialModel[]>
+}
+
+class MailerService {
+  +sendWelcomeMail(userName: string, address: string): Promise<boolean>
+}
+
+class OAuth2Service {
+  +verifyIdToken(token: string): Promise<false | TokenPayload>
+}
+
+class AuthService {
+  -authorizations: Repository<AuthorizationModel>
+  -jwtService: JwtService
+  -oauth2Service: OAuth2Service
+  -mailerService: MailerService
+  +buildToken(payload: any, permissions?: ["DEFAULT_LEVEL"]): Promise<string>
+  +getPreviousAuthorization(idToken: string, payload: TokenPayload): Promise<boolean>
+  +authorizeGoogleToken(idToken: string): Promise<{ bearer: string; payload: TokenPayload; }>
+}
+
+class EvaluationService {
+  -courses: Repository<CourseModel>
+  -rating: Repository<RatingModel>
+  -popularity: Repository<PopularityModel>
+  +submitRating(note: number): Promise<RatingModel>
+  +submitCoursePopularity(popularity: PopularityValidator): Promise<PopularityModel>
+  +fetchRatings(): Promise<{ average: number; total: number; }>
+  +fetchPopularity(courseId: number): Promise<PopularityInfo>
+}
+
+class MiningService {
+  +capitalizeString(str: string): string
+  +getShortbioAreas(shortbio: string): string[]
+}
+
+class ProfessorService {
+  -course: Repository<CourseModel>
+  -professor: Repository<ProfessorModel>
+  -miningService: MiningService
+  +fetchProfessors(): Promise<ProfessorModel[]>
+  +fetchProfessorById(professorId: number): Promise<ProfessorModel>
+  +fetchCourseProfessors(courseId: number): Promise<ProfessorModel[]>
+}
+
+CourseService --> "1" CampusModel
+CourseService --> "1" CourseModel
+CourseService --> "1" EventModel
+CourseService --> "1" ContactModel
+CourseService --> "1" SocialModel
+CourseService --> "*" CourseModel
+CourseService --> "*" CampusModel
+CourseService --> "*" EventModel
+CourseService --> "*" ContactModel
+CourseService --> "*" SocialModel
+AuthService --> "1" AuthorizationModel
+AuthService --> "1" OAuth2Service
+AuthService --> "1" MailerService
+EvaluationService --> "1" CourseModel
+EvaluationService --> "1" RatingModel
+EvaluationService --> "1" PopularityModel
+EvaluationService --> "1" PopularityValidator
+ProfessorService --> "1" CourseModel
+ProfessorService --> "1" ProfessorModel
+ProfessorService --> "1" MiningService
+ProfessorService --> "*" ProfessorModel
+
+@enduml

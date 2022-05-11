@@ -1,0 +1,24 @@
+@startuml "Activity Diagram"
+
+partition "Visualizar corpo docente do curso" {
+  start
+  if (Possui conectividade?) then (Possui conexão Wi-Fi)
+    :Entrar usando o Gmail;
+    :Exibir cursos mais compatíveis com as escolhas;
+    fork
+    :Visualizar cursos horizontalmente;
+    fork again
+    :Visualizar cursos verticalmente;
+    end fork
+    :Selecionar curso;
+    :Navegar para corpo docente;
+    :Exibir corpo docente;
+    :Selecionar professor;
+    :Detalhar biografia do professor;
+    stop
+  else (Sem acesso ao Wi-Fi)
+    end
+  endif
+}
+
+@enduml

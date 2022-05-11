@@ -1,29 +1,34 @@
-@startuml Contexto
+@startuml "Container Diagram"
+
+title "Seja UPE - Diagrama de container do sistema"
+
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
 
-title "Seja UPE - Diagrama de container do sistema"
+skinparam backgroundcolor transparent
 
-Person(personUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")
-Container_Boundary(systemSejaUPE, "Sistema Seja UPE") {
-    Component(componentMobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
-    Component(componentApi, "API REST", "NestJS/Node", "Provê as funcionalidades do Seja UPE via uma API JSON/HTTPS.")
-    ComponentDb(componentDataBase, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
+Person(ActorUser, "Usuário", "É o ator responsável por realizar a interação com o sistema e obter as informações referentes à universidade. Este ator requer autenticação utilizando uma conta Google para acessar as funcionalidades do aplicativo.")
 
-    Rel(componentMobileApp, componentApi, "Faz uma chamada para API", "JSON/HTTPS")
-    Rel(componentApi, componentDataBase, "Realiza leitura e armazena dados", "TypeORM")
+Container_Boundary(SystemSejaUPE, "Sistema Seja UPE") {
+  Container(ContainerMobileApp, "Aplicativo Móvel", "Container: React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
+  Container(ContainerServerApi, "API REST", "Container: NestJS/Node", "Provê as funcionalidades do Seja UPE via API JSON/HTTPS.")
+  Container(ContainerDatabase, "Banco de Dados", "Container: RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
+  
+  Rel(ContainerServerApi, ContainerDatabase, "Realiza leitura e armazena dados", "TypeORM")
+  Rel(ContainerMobileApp, ContainerServerApi, "Faz uma chamada para API", "JSON/HTTPS")
 }
-System(systemWebSocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
-System_Ext(systemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
-System_Ext(systemNotification, "Sistema de Notificações", "É responsável por emitir as notificações no smartphone através do Expo Notifications para lembrete de interação com o aplicativo.")
-System_Ext(systemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
 
-Rel(personUser, systemSejaUPE, "Visualiza e interage com as funcionalidades do sistema")
-Rel(systemEmail, personUser, "Manda e-mail para", "SMTP2GO")
-Rel(systemSejaUPE, systemEmail, "Manda e-mail utilizando", "SMTP2GO")
-Rel(systemSejaUPE, systemNotification, "Aplicativo agenda as notificações para aproximadamente 3 horas depois", "Expo Notification")
-Rel(systemSejaUPE, systemWebSocket, "Envie e recebe mensagens", "React Native useWebSocket")
-Rel(systemSejaUPE, systemOAuth2, "Autentica o usuário", "oAuth2")
+System(SystemWebsocket, "WebSocket", "É responsável por manter o envio e recebimento de mensagens dentro do chat.")
+System_Ext(SystemSmtp, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
+System_Ext(SystemNotification, "Sistema de Notificações", "É responsável por emitir as notificações no smartphone através do Expo Notifications para lembrar o usuário de interação com o aplicativo.")
+System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar ao usuário realizar login utilizando sua conta Google.")
+
+Rel(ActorUser, ContainerMobileApp, "Visualiza e interage com as funcionalidades do sistema")
+Rel(ContainerMobileApp, SystemNotification, "Aplicativo agenda as notificações para aproximadamente 3 horas depois", "Expo Notification")
+Rel(ContainerMobileApp, SystemWebsocket, "Envia e recebe mensagens", "React Native useWebSocket")
+Rel(ContainerServerApi, SystemWebsocket, "Difunde as mensagens em modo Broadcast", "NestJS Websocket Gateway")
+Rel(ContainerServerApi, SystemOAuth2, "Autentica o usuário", "OAuth2")
+Rel(ContainerServerApi, SystemSmtp, "Envia e-mail utilizando", "SMTP2GO")
 
 @enduml

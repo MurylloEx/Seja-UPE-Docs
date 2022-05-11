@@ -1,0 +1,20 @@
+@startuml "Class Diagram"
+
+title "Diagrama de Classes - Exceções"
+
+left to right direction
+
+interface Error 
+class HttpException extends Error
+class NotFoundException extends HttpException
+class BadRequestException extends HttpException
+class RequestTimeoutException extends HttpException
+class UnauthorizedException extends HttpException
+class CampusNotFoundException extends NotFoundException
+class CourseNotFoundException extends NotFoundException
+class InvalidObjectException extends BadRequestException
+class OutdatedVersionException extends HttpException
+class ServerTimeoutException extends RequestTimeoutException
+class OAuth2UnauthorizedException extends UnauthorizedException
+
+@enduml

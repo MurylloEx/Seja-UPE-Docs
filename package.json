@@ -6,7 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "c4builder site"
+    "start": "npx rimraf docs && c4builder && npx serve docs -p 80"
   },
   "repository": {
     "type": "git",

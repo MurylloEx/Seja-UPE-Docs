@@ -1,0 +1,17 @@
+@startuml "Class Diagram"
+
+title "Diagrama de Classes - Filtros"
+
+class HttpExceptionFilter implements ExceptionFilter {
+  -logger: Logger
+  +getExceptionName(exception: HttpException): string
+  +catch(exception: HttpException, host: ArgumentsHost): Promise<void>
+}
+
+class UnhandledErrorFilter implements ExceptionFilter {
+  -logger: Logger
+  +getExceptionName(exception: Error): string
+  +catch(exception: Error, host: ArgumentsHost): Promise<void>
+}
+
+@enduml

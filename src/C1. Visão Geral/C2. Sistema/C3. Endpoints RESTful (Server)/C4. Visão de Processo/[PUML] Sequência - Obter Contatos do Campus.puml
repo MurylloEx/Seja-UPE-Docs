@@ -1,0 +1,31 @@
+@startuml "Sequence Diagram"
+
+title "Diagrama de Sequência - Obter Contatos do Campus"
+
+actor "Usuário"                   as USER
+control "CampusController"        as CAMPUS_CONTROLLER
+participant "CourseService"       as COURSE_SERVICE
+entity "Repository<CampusModel>"  as CAMPUS_REPOSITORY
+entity "Repository<ContactModel>" as CONTACT_REPOSITORY
+
+USER -> CAMPUS_CONTROLLER : 1. Solicita os contatos de um Campus : onCampusContactsRequested
+CAMPUS_CONTROLLER -> COURSE_SERVICE : 1.1. Consulta os contatos de um Campus : fetchCampusContacts
+COURSE_SERVICE -> CAMPUS_REPOSITORY : 1.1.1. Consulta o Campus pelo identificador especificado : findOne
+CAMPUS_REPOSITORY -->> COURSE_SERVICE : Retorna o Campus desejado : Promise<CampusModel | null>
+alt "findOne() === null" : "Caso o Campus especificado pelo identificador não exista"
+  COURSE_SERVICE -> COURSE_SERVICE : 1.1.2. throw new CampusNotFoundException
+end
+COURSE_SERVICE -> CONTACT_REPOSITORY : 1.1.3. Consulta os contatos do Campus especificado : find
+CONTACT_REPOSITORY -->> COURSE_SERVICE : Retorna uma lista de contatos referentes ao Campus : Promise<ContactModel[]>
+COURSE_SERVICE -->> CAMPUS_CONTROLLER : Retorna uma lista de contatos referentes ao Campus : Promise<ContactModel[]>
+CAMPUS_CONTROLLER -->> USER : Retorna uma lista de contatos referentes ao Campus : ContactModel[]
+note left
+  O Framework NestJS abstrai as promises 
+  e transforma a resposta em um objeto 
+  JSON trafegável pelo Socket. 
+
+  Nesse caso, onCampusContactsRequested 
+  é uma Action do Controller.
+end note
+
+@enduml

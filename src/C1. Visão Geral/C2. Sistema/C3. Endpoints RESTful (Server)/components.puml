@@ -1,21 +1,62 @@
-@startuml
+@startuml "C3 Component Diagram"
+
+title "Seja UPE - Diagrama de Componentes da API Rest"
+
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
+LAYOUT_LEFT_RIGHT()
 LAYOUT_WITH_LEGEND()
 
-Container(api, "API Application", "java and Spring MVC", "Delivers the static content and the internet banking single page application.")
+skinparam Style strictuml
+skinparam backgroundcolor transparent
 
-Container_Boundary(spa, "Single Page Application") {
-    Component(routing, "Routing", "React router", "Handler slient side routing")
-    Component(store, "Data Store", "Redux", "The central object holding the application state")
-    Component(login, "Login form", "React Class", "The login page")
-    Component(profile, "Profile Page", "React Class", "The page where the logged in user can view and edit his/her information")
+Container(MobileApp, "Aplicativo Móvel", "React Native", "Provê aos usuários acesso as funcionalidades a partir do cliente.")
+ContainerDb(Database, "Banco de Dados", "RDBMS/SQLite", "Armazena dados dos campi da UPE (Universidade de Pernambuco).")
+System(SystemWebsocket, "WebSocket", "É responsável por manter a o envio e recebimento de mensagens dentro do chat.")
+System_Ext(SystemEmail, "Sistema de E-mail", "É responsável por enviar os e-mails de boas-vindas ao usuário através do SMTP2GO.")
+System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google.")
+
+Container_Boundary(SystemApi, "API REST") {
+
+  Container_Boundary(SystemControllers, "Controllers") {
+    Component(AuthController, "Authentication Controller", "Nest Controller", "Traduz a chamada HTTP de autenticação em chamada de serviço de <b>Autenticação</b>.")
+    Component(CampusController, "Campus Controller", "Nest Controller", "Traduz a chamada HTTP de solicitação de informações do Campus em chamada de serviço de <b>Curso</b>.")
+    Component(EvaluationController, "Evaluation Controller", "Nest Controller", "Traduz a chamada HTTP de avaliação de cursos e do aplicativo em chamada de serviço de <b>Avaliação</b>.")
+    Component(CourseController, "Course Controller", "Nest Controller", "Traduz a chamada HTTP de solicitação de informações de cursos em chamada de serviço de <b>Curso</b>.")
+    Component(ProfessorController, "Professor Controller", "Nest Controller", "Traduz a chamada HTTP de solicitação de informações de professores em chamada de serviço de <b>Professores</b>.")
+
+    Rel(MobileApp, AuthController, "Makes API calls to", "JSON/HTTP")
+    Rel(MobileApp, CampusController, "Makes API calls to", "JSON/HTTP")
+    Rel(MobileApp, EvaluationController, "Makes API calls to", "JSON/HTTP")
+    Rel(MobileApp, CourseController, "Makes API calls to","JSON/HTTP")
+    Rel(MobileApp, ProfessorController, "Makes API calls to","JSON/HTTP")
+  }
+
+  Container_Boundary(SystemServices, "Services") {
+    Component(AuthService, "Auth Service", "Nest Service", "É responsável por verificar se é o primeiro acesso e enviar e-mails de boas vindas, além de verificar a validade do ID Token e Access Token.")
+    Component(MailerService, "Mailer Service", "Nest Service", "É responsável por envio de e-mails de boas vindas com templates personalizados.")
+    Component(OAuth2Service, "OAuth2 Service", "Nest Service", "É responsável pela validação do ID Token e Access Token emitidos pelo Expo Google Auth no aplicativo do usuário.")
+    Component(EvaluationService, "Evaluation Service", "Nest Service", "É responsável por processar as avaliações que os usuários fazem do questionário e as avaliações de sugestões de cursos.")
+    Component(CourseService, "Course Service", "Nest Service", "É responsável por consultar as informações dos cursos, provendo acesso a todos os cursos da UPE.")
+    Component(ProfessorService, "Professor Service", "Nest Service", "E responsável por consultar as informações dos professores, provendo acesso a todos os professores da UPE.")
+    Component(MiningService, "Mining Service", "Nest Service", "E responsável por minerar dados dos currículos LATTES dos professores utilizando expressões regulares.")
+    
+    Rel(AuthController, AuthService, "Uses")
+    Rel(CampusController, CourseService, "Uses" )
+    Rel(EvaluationController, EvaluationService, "Uses")
+    Rel(CourseController, CourseService, "Uses")
+    Rel(CourseController, ProfessorService, "Uses")
+    Rel(ProfessorController, ProfessorService, "Uses")
+    Rel(AuthService, MailerService, "Uses")
+    Rel(AuthService, OAuth2Service, "Uses")
+    Rel(ProfessorService, MiningService, "Uses")
+  }
+
+  Rel(MailerService, SystemEmail, "Uses")
+  Rel(OAuth2Service, SystemOAuth2, "Uses")
+  Rel(SystemApi, SystemWebsocket, "Uses")
+  Rel(SystemServices, Database, "Uses")
+
 }
-
-Rel(spa, api, "Uses", "JSON/HTTPS")
-
-Rel(login, store, "Uses");
-Rel(routing, store, "Uses");
-Rel(profile, store, "Uses");
 
 @enduml

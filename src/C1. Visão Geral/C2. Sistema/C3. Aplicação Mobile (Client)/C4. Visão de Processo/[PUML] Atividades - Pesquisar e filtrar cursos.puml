@@ -1,0 +1,22 @@
+@startuml "Activity Diagram"
+
+partition "Pesquisar/Filtrar cursos" {
+  start
+  if (Possui conectividade?) then (Possui conexão Wi-Fi)
+    :Entrar usando o Gmail;
+    if (Respondeu o questionário?) then (Não)
+      :Responder questionário;
+    endif
+    :Já saber qual curso deseja;
+    :Selecionar modalidade de entrada;
+    :Informar nota desejada;
+    :Selecionar Campus;
+    :Selecionar Curso;
+    :Pesquisar cursos com filtragem desejada;
+    stop
+  else (Sem acesso ao Wi-Fi)
+    end
+  endif
+}
+
+@enduml

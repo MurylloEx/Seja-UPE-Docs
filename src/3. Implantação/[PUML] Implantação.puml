@@ -1,0 +1,38 @@
+@startuml "Component Diagram"
+
+left to right direction
+
+title "Diagrama de Implantação do Seja UPE"
+
+node "Smartphone do Usuário" <<device>> as NODE_SMARTPHONE {
+  component "Sistema Operacional Android" <<software>>
+}
+
+node "Servidor de Firewall (CloudFlare)" <<device>> as NODE_CLOUDFLARE {
+
+}
+
+node "Proxy Reverso e Load Balancer" <<device>> as NODE_PROXY {
+  node "NodeJS v12.2.21" <<software>> as NODE_PROXY_RUNTIME {
+    component "Magic Proxy 1.1.21" <<proxy>>
+  }
+}
+
+node "Servidor Web Seja UPE" <<device>> as NODE_WEBSERVER {
+  node "NodeJS v12.2.21" <<software>> as NODE_WEBSERVER_RUNTIME {
+    artifact "seja_upe_api-1.0" <<software>>
+  }
+}
+
+database "Servidor de Banco de Dados" <<device>> as NODE_DATABASE {
+  component "SQLite3 Database Driver" as DATABASE_DRIVER
+  artifact "database.sqlite3" <<file>> as DATABASE_FILE
+  DATABASE_DRIVER -> DATABASE_FILE : <b>uses</b>
+}
+
+NODE_SMARTPHONE -left- NODE_CLOUDFLARE : <<HTTPS>>
+NODE_CLOUDFLARE -up- NODE_PROXY : <<HTTPS>>
+NODE_PROXY -up- NODE_WEBSERVER : <<HTTPS>>
+NODE_WEBSERVER -down- NODE_DATABASE : <<TCP/IP>>
+
+@enduml

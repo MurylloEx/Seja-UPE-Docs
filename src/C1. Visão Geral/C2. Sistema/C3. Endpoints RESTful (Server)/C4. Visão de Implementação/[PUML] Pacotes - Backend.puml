@@ -1,0 +1,39 @@
+@startuml "Package Diagram"
+
+title "Diagrama de Pacotes do Seja UPE"
+
+left to right direction
+
+package "com.sejaupe" <<package>> {
+  package "com.sejaupe.src" <<package>> {
+    package "com.sejaupe.src.config"              <<package>> as CONFIG 
+    package "com.sejaupe.src.docs"                <<package>> as DOCS
+    package "com.sejaupe.src.controllers"         <<package>> as CONTROLLERS
+    package "com.sejaupe.src.hooks"               <<package>> as HOOKS
+    package "com.sejaupe.src.exceptions"          <<package>> as EXCEPTIONS
+    package "com.sejaupe.src.filters"             <<package>> as FILTERS
+    package "com.sejaupe.src.models"              <<package>> as MODELS
+    package "com.sejaupe.src.validators"          <<package>> as VALIDATORS
+    package "com.sejaupe.src.modules"             <<package>> as MODULES
+    package "com.sejaupe.src.services"            <<package>> as SERVICES
+    package "com.sejaupe.src.websocket"           <<package>> as WEBSOCKET
+    package "com.sejaupe.src.security"            <<package>> as SECURITY {
+      package "com.sejaupe.src.security.guards"   <<package>> as GUARDS
+    }
+  }
+}
+
+CONTROLLERS .right.> GUARDS : <b>uses</b>
+CONTROLLERS .left.> FILTERS : <b>uses</b>
+CONTROLLERS ..> SERVICES : <b>uses</b>
+CONTROLLERS ..> MODELS : <b>uses</b>
+CONTROLLERS <.. MODULES : <b>uses</b>
+MODULES ..> SERVICES : <b>uses</b>
+MODULES .left.> VALIDATORS : <b>uses</b>
+MODELS <.left. MODULES : <b>uses</b>
+HOOKS .right.> CONFIG : <b>uses</b>
+FILTERS .left.> EXCEPTIONS : <b>uses</b>
+SERVICES .left.> CONFIG : <b>uses</b>
+GUARDS ..> SERVICES : <b>uses</b>
+
+@enduml

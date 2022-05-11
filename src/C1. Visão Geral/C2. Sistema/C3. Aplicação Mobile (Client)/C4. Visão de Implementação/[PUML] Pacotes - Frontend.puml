@@ -1,0 +1,38 @@
+@startuml "Package Diagram"
+
+title "Diagrama de Pacotes do Seja UPE"
+
+left to right direction
+
+package "com.sejaupe.app" <<package>> {
+  package "com.sejaupe.app.src" <<package>> {
+    package "com.sejaupe.app.src.core" <<package>> as CORE {
+      package "com.sejaupe.app.src.core.hooks"      <<package>> as HOOKS
+      package "com.sejaupe.app.src.core.components" <<package>> as COMPONENTS
+      package "com.sejaupe.app.src.core.config"     <<package>> as CONFIG
+      package "com.sejaupe.app.src.core.providers"  <<package>> as PROVIDERS
+      package "com.sejaupe.app.src.core.themes"     <<package>> as THEMES
+      package "com.sejaupe.app.src.core.services"   <<package>> as SERVICES
+    }
+    package "com.sejaupe.app.src.pages"   <<package>> as PAGES
+    package "com.sejaupe.app.src.assets"  <<package>> as ASSETS
+    package "com.sejaupe.app.src.routes"  <<package>> as ROUTES
+  }
+}
+
+PROVIDERS ..> THEMES : <b>uses</b>
+SERVICES .right.> CONFIG : <b>uses</b>
+HOOKS .down.> CONFIG : <b>uses</b>
+HOOKS .down.> SERVICES : <b>uses</b>
+HOOKS .left.> PROVIDERS : <b>uses</b>
+COMPONENTS .down.> THEMES : <b>uses</b>
+COMPONENTS .left.> HOOKS : <b>uses</b>
+COMPONENTS .left.> ASSETS : <b>uses</b>
+
+PAGES .left.> ROUTES : <b>uses</b>
+PAGES .right.> ASSETS : <b>uses</b>
+PAGES .right.> COMPONENTS : <b>uses</b>
+PAGES .down.> HOOKS : <b>uses</b>
+
+
+@enduml

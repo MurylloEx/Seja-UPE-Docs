@@ -1,0 +1,27 @@
+@startuml "Class Diagram"
+
+title "Diagrama de Classes - Interceptadores"
+
+left to right direction
+
+class NestInterceptor {
+  +intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any>
+}
+
+class CacheRequestInterceptor extends CacheInterceptor {
+  +trackBy(context: ExecutionContext): string
+}
+
+class ResponseInterceptor implements NestInterceptor {
+  +intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any>
+}
+
+class TimeoutInterceptor implements NestInterceptor {
+  +intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any>
+}
+
+class VersionInterceptor implements NestInterceptor {
+  +intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any>
+}
+
+@enduml

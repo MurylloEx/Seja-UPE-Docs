@@ -1,0 +1,145 @@
+@startuml "Class Diagram"
+
+title "Diagrama de Classes - Entidades e Modelos"
+
+class ApiResponse<T> {
+  +timestamp: string
+  +path: string
+  +error: string
+  +status: string
+  +code: string
+  +response: T
+}
+
+class AuthorizationValidator {
+  +idToken: string
+}
+
+class CampusOptionsValidator {
+  +relations: string[]
+}
+
+class PopularityValidator {
+  +courseId: number
+  +value: PopularityType
+}
+
+class BaseModel extends BaseEntity {
+  +id: number
+  +createdAt: number
+  +updatedAt?: number
+  +validate(): Promise<void>
+  +update(): Promise<void>
+}
+
+class EventModel extends BaseModel {
+  +name: string
+  +link: string
+  +campus: CampusModel
+}
+
+class SocialModel extends BaseModel {
+  +name: SocialNetwork
+  +value: string
+  +campus: CampusModel
+}
+
+class SsaGradeModel extends BaseModel {
+  +year: number
+  +shareholderHighest: string
+  +shareholderLowest: string
+  +highest: string
+  +lowest: string
+  +concurrence: number
+  +course: CourseModel
+}
+
+class ProfessorModel extends BaseModel {
+  +name: string
+  +shortbio: string
+  +email: string
+  +lattesUrl: string
+  +photoUrl: string
+  +areas: string[]
+  +course: CourseModel
+}
+
+class SisuGradeModel extends BaseModel {
+  +year: number
+  +shareholderHighest: string
+  +shareholderLowest: string
+  +highest: string
+  +lowest: string
+  +course: CourseModel
+}
+
+class PopularityModel extends BaseModel {
+  +value: PopularityType
+  +course: CourseModel
+}
+
+class CourseModel extends BaseModel {
+  +name: string
+  +about: string
+  +profile: string
+  +history: string
+  +expertiseAreas: string
+  +jobMarket: string
+  +ingress: string
+  +ppcUrl: string
+  +campus: CampusModel
+  +ssaGrades: SsaGradeModel[]
+  +sisuGrades: SisuGradeModel[]
+  +popularity: PopularityModel[]
+  +professors: ProfessorModel[]
+}
+
+class ContactModel extends BaseModel {
+  +categoryName: string
+  +fieldIcon: string
+  +value: string
+  +campus: CampusModel
+}
+
+class CampusModel extends BaseModel {
+  +name: string
+  +description: string
+  +latitude: string
+  +longitude: string
+  +events: EventModel[]
+  +socialNetworks: SocialModel[]
+  +contacts: ContactModel[]
+  +courses: CourseModel[]
+}
+
+class RatingModel extends BaseModel {
+  +note: number
+}
+
+class AuthorizationModel extends BaseModel {
+  +idToken: string
+  +email: string
+  +sub: string
+  +atHash: string
+  +iat: number
+  +exp: number
+}
+
+EventModel -right-> "1" CampusModel
+SocialModel -right-> "1" CampusModel
+SsaGradeModel -left-> "1" CourseModel
+ProfessorModel --> "1" CourseModel
+SisuGradeModel --> "1" CourseModel
+PopularityModel -up-> "1" CourseModel
+CourseModel -up-> "1" CampusModel
+CourseModel -left-> "*" SsaGradeModel
+CourseModel -down-> "*" SisuGradeModel
+CourseModel -down-> "*" PopularityModel
+CourseModel -right-> "*" ProfessorModel
+ContactModel -up-> "1" CampusModel
+CampusModel ---> "*" EventModel
+CampusModel ---> "*" SocialModel
+CampusModel ---> "*" ContactModel
+CampusModel ---> "*" CourseModel
+
+@enduml

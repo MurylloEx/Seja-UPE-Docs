@@ -1,21 +1,55 @@
-@startuml
+@startuml "Component Diagram"
+
+title "Seja UPE - Diagrama de Components Mobile"
+
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
+LAYOUT_LEFT_RIGHT()
 
-Container(api, "API Application", "java and Spring MVC", "Delivers the static content and the internet banking single page application.")
+skinparam Style strictuml
+skinparam backgroundcolor transparent
 
-Container_Boundary(spa, "Single Page Application") {
-    Component(routing, "Routing", "React router", "Handler slient side routing")
-    Component(store, "Data Store", "Redux", "The central object holding the application state")
-    Component(login, "Login form", "React Class", "The login page")
-    Component(profile, "Profile Page", "React Class", "The page where the logged in user can view and edit his/her information")
+scale 2048 width
+scale 2048 height
+
+Container_Boundary(ContainerMobileApp, "Mobile App") {
+  Component(ComponentAppContext, "App Context", "Component: Context API", "É utilizado para compartilhar e gerenciar o estado para toda a aplicação")
+  Component(ComponentAppPages, "Pages", "Component: React Native JSX", "Todas as páginas da aplicação que o usuário poderá interagir")
+  Component(ComponentAppComponents, "Components", "Component: React Native JSX", "Menor parte de uma tela, constitui os elementos gráficos utilizados nas páginas do Aplicativo")
+  Component(ComponentAppRoutes, "Routes", "Component: React Native JSX", "Rotas da aplicação")
+  Component(ComponentAppThemes, "Themes", "Component: Theme Palettes", "Provê as paletas de cores (Dark ou Light) utilizadas pelos componentes e páginas.")
+  
+  Container_Boundary(ContainerMobileAppHooks, "Hooks") {
+    Component(ComponentAppProfessorsHook, "Professors Hook", "Component: Axios Hook", "Conecta à API para pegar às informações dos professores")
+    Component(ComponentAppGoogleAuthHook, "Google Auth Hook", "Component: Expo Google App auth", "Responsável por realizar a autenticação com a conta Google do usuário")
+    Component(ComponentAppThemeHook, "Theme Hook", "Component: Theme Hook", "Provê acesso ao tema atualmente definido para páginas e componentes.")
+    Component(ComponentAppRequestHook, "Request Hook", "Component: Axios Request Hook", "Permite realizar requisições Http utilizando useRequest e useAuthorizedRequest")
+  }
+
+  Container_Boundary(ContainerMobileAppServices, "Services") {
+    Component(ComponentAppHttpService, "Http Service", "Component: Axios Client", "Encapsula e provê o acesso simplificado aos métodos HTTP do Axios Client")
+    Component(ComponentAppOAuth2Service, "OAuth2 Service", "Component: Expo Google Auth", "Encapsula e provê o acesso simplificado à API para exibir o diálogo de Autenticação Google")
+  }
 }
 
-Rel(spa, api, "Uses", "JSON/HTTPS")
+Container(ComponentApi, "API REST", "NestJS/Node", "Provê as funcionalidades do Seja UPE via uma API JSON/HTTPS")
+System_Ext(SystemOAuth2, "Sistema de SSO", "É responsável por possibilitar o usuário realizar login utilizando sua conta Google")
 
-Rel(login, store, "Uses");
-Rel(routing, store, "Uses");
-Rel(profile, store, "Uses");
+Rel(ComponentAppPages, ComponentAppProfessorsHook, "Uses")
+Rel(ComponentAppPages, ComponentAppGoogleAuthHook, "Uses")
+Rel(ComponentAppPages, ComponentAppComponents, "Uses")
+Rel(ComponentAppPages, ComponentAppContext, "Uses")
+Rel(ComponentAppRoutes, ComponentAppPages, "Uses")
+
+Rel(ComponentAppProfessorsHook, ComponentAppRequestHook, "Uses")
+Rel(ComponentAppGoogleAuthHook, ComponentAppOAuth2Service, "Uses")
+Rel(ComponentAppThemeHook, ComponentAppThemes, "Uses")
+Rel(ComponentAppPages, ComponentAppThemeHook, "Uses")
+Rel(ComponentAppComponents, ComponentAppThemeHook, "Uses")
+Rel(ComponentAppRequestHook, ComponentAppHttpService, "Uses")
+
+Rel(ComponentAppHttpService, ComponentApi, "Realiza chamadas para API", "JSON/HTTPS")
+Rel(ComponentAppOAuth2Service, SystemOAuth2, "Realiza a autenticação Google", "JSON/HTTPS")
 
 @enduml

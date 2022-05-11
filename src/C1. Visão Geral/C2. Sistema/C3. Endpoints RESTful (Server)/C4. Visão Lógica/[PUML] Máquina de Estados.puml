@@ -1,0 +1,41 @@
+@startuml "State Machine Diagram"
+
+title "Diagrama de Máquina de Estados do Seja UPE"
+
+state "Primeiro acesso"             as STATE_01
+state "Autenticado"                 as STATE_02
+state "Realizando teste vocacional" as STATE_03
+state "Em sugestão"                 as STATE_04
+state "Avaliado"                    as STATE_05
+state "Avaliando"                   as STATE_06
+
+state IS_FIRST_ACCESS <<choice>>
+note right of IS_FIRST_ACCESS
+  É o primeiro acesso?
+end note
+
+state IS_SURVEY_DONE <<choice>>
+note right of IS_SURVEY_DONE
+  Questionário finalizado?
+end note
+
+state WANT_RATE_SURVEY <<choice>>
+note right of WANT_RATE_SURVEY
+  Deseja avaliar sugestões?
+end note
+
+[*] --> IS_FIRST_ACCESS : Realizar login
+IS_FIRST_ACCESS --> STATE_01 : Sim
+IS_FIRST_ACCESS --> STATE_02 : Não
+STATE_01 --> STATE_02
+STATE_02 --> STATE_03 : Preencher formulário : showSurvey()
+STATE_03 --> IS_SURVEY_DONE : Finalizar questionário : exitSurvey()
+STATE_03 <-- IS_SURVEY_DONE : Não
+IS_SURVEY_DONE --> STATE_04 : Sim
+STATE_04 --> WANT_RATE_SURVEY : Analisar sugestões do aplicativo : showSuggestions()
+WANT_RATE_SURVEY --> STATE_06 : Sim
+WANT_RATE_SURVEY --> [*] : Não
+STATE_06 --> STATE_05 : Finalizar avaliação: closeRatingModal()
+STATE_05 --> [*]
+
+@enduml

@@ -1,0 +1,85 @@
+@startuml "Use Case Diagram"
+
+title "Diagrama de Casos de Uso do Seja UPE"
+
+left to right direction
+
+skinparam Style strictuml
+
+scale 2048 width
+scale 2048 height
+
+actor "Usuário" as USER
+
+usecase "[UC-27] Lembrete do teste vocacional"                      as UC27
+usecase "[UC-01] Exibir cursos de um determinado campus"            as UC01
+usecase "[UC-25] Realizar login"                                    as UC25
+
+package "Cursos da UPE - Não sei o que quero" {
+  usecase "[UC-14] Realizar teste vocacional"                       as UC14
+  usecase "[UC-15] Ilustrar potencial de vocação para o curso"      as UC15
+  usecase "[UC-16] Ofertar possibilidade de refazer teste"          as UC16
+  usecase "[UC-23] Avaliar sugestão de cursos"                      as UC23
+  usecase "[UC-26] Pesquisar cursos"                                as UC26
+}
+
+package "Cursos da UPE - Já sei o que quero" {
+  usecase "[UC-02] Transparecer informações de concorrência"        as UC02
+  usecase "[UC-03] Indicar notas de corte"                          as UC03
+  usecase "[UC-04] Divulgar maiores notas do curso no ano anterior" as UC04
+  usecase "[UC-05] Informar maneiras de ingressar"                  as UC05
+  usecase "[UC-06] Apresentar informações sobre o curso"            as UC06
+  usecase "[UC-07] Exibir perfil do curso"                          as UC07
+  usecase "[UC-08] Exibir corpo docente"                            as UC08
+  usecase "[UC-09] Detalhar corpo docente"                          as UC09
+  usecase "[UC-10] Apresentar áreas de atuação"                     as UC10
+  usecase "[UC-11] Mostrar visão do mercado de trabalho"            as UC11
+  usecase "[UC-12] Disponibilizar o projeto pedagógico do curso"    as UC12
+  usecase "[UC-13] Retratar contexto histórico do curso"            as UC13
+  usecase "[UC-22] Interagir pelo bate-papo"                        as UC22
+  usecase "[UC-24] Avaliar determinado curso"                       as UC24
+}
+
+package "Campi e Informações da UPE" {
+  usecase "[UC-17] Exibir descrição do Campus"                      as UC17
+  usecase "[UC-18] Informar redes sociais"                          as UC18
+  usecase "[UC-19] Apresentar localização do Campus"                as UC19
+  usecase "[UC-20] Exibir principais eventos"                       as UC20
+  usecase "[UC-21] Informar meios de contato"                       as UC21
+}
+
+USER -- UC25
+USER -- UC01
+USER -- UC16
+USER -- UC27
+USER -- UC23
+USER -- UC17
+
+UC17 <.. UC18 : extend
+UC17 <.. UC19 : extend
+UC17 <.. UC20 : extend
+UC17 <.. UC21 : extend
+
+UC14 <.. UC15 : extend
+UC14 <.. UC26 : extend
+
+UC25 <.. UC22 : extend
+UC14 <.. UC25 : include
+
+UC06 <.. UC01 : include
+UC06 <.. UC05 : extend
+UC06 <.. UC02 : extend
+UC02 <.. UC03 : extend
+UC02 <.. UC04 : extend
+
+UC06 <.. UC24 : extend
+UC06 <.. UC07 : extend
+UC06 <.. UC08 : extend
+UC09 <.. UC08 : extend
+
+UC06 ..> UC10 : include
+UC06 ..> UC11 : include
+UC06 ..> UC12 : include
+UC06 ..> UC13 : include
+
+@enduml

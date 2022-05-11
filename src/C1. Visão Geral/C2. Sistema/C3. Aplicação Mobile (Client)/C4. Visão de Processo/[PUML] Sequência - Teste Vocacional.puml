@@ -1,0 +1,52 @@
+@startuml "Sequence Diagram"
+
+title "Diagrama de Sequência - Teste Vocacional"
+
+actor "Usuário"         as USER
+boundary "Suggestions"  as SUGGESTIONS
+boundary "Survey"       as SURVEY
+
+USER -> SUGGESTIONS : 1. Acessa a tela de sugestões na Tab "Não sei o que quero"
+SUGGESTIONS -> SUGGESTIONS : 1.1. Carrega informações de Campus, Cursos, Professores, etc : useCampusData()
+SUGGESTIONS -->> SUGGESTIONS : Carrega todas as informações do Campus contendo os Cursos : Optional<CampusWithCourseResponse>[]
+SUGGESTIONS -->> USER : Carrega todas as informações do Campus contendo os Cursos : Optional<CampusWithCourseResponse>[]
+USER -> SUGGESTIONS : 2. Usuário clica no botão "Fazer questionário" : onSurveyButtonClick()
+SUGGESTIONS -> SUGGESTIONS : 2.1. Navega para a tela Survey: navigate()
+SUGGESTIONS ->> SURVEY : 2.1.1. Tela é carregada de forma assíncrona : componentDidMount()
+SURVEY -> SURVEY : 2.1.1.1. Obtém a referência de navegação para navegar a outras telas : useNavigation()
+SURVEY -->> SURVEY : Retorna o objeto de navegação : WelcomeNavigationProp
+SURVEY -> SURVEY : 2.1.1.2.Carrega as cores do tema sendo utilizado atualmente : useTheme()
+SURVEY -->> SURVEY : Retorna o tema usado atualmente e seu respectivo Setter : [ThemeValue, (v: ThemeValue) => void]
+SURVEY -> SURVEY : 2.1.1.3.Cria um Grupo de Radio Buttons para utilizar no questionário : useRadioGroup()
+SURVEY -->> SURVEY : Retorna um grupo de Radio Buttons : RadioGroupHook
+SURVEY -> SURVEY : 2.1.1.4.Obtém as funções Getter e Setter dos resultados do teste vocacional : useSurveyResults()
+SURVEY -->> SURVEY : Retorna o Getter e Setter dos resultados do teste vocacional : SurveyResultsHook
+USER -> SURVEY : 3. Usuário clica em uma alternativa : onChoiceChanged()
+SURVEY -->> USER
+loop "Repetir até que todas as 15 perguntas tenham sido respondidas" : "Exibe todas as 15 perguntas do Teste Vocacional, uma a uma."
+  USER -> SURVEY : 4. Usuário clica em "Avançar" : onSurveyAdvance()
+  SURVEY -> SURVEY : 4.1. Progresso do questionário é incrementado : setProgress()
+  alt "Caso o teste esteja concluído" : "Verifica se é a última pergunta respondida"
+    SURVEY -> SURVEY : 4.2. Calcula os valores das sugestões dos cursos com base nas respostas : getSurveyResults()
+    SURVEY -->> SURVEY : Calcula os valores de respostas e retorna percentuais de indicação de curso : SurveyValue[]
+    SURVEY -> SURVEY : 4.3. Define o resultado dos percentuais do teste vocacional : setSurveyResults()
+    SURVEY -> SURVEY : 4.4. Navega para a tela Suggestions : navigate()
+  end
+  SURVEY ->> SUGGESTIONS : 4.4.1. Tela é carregada de forma assíncrona : componentDidMount()
+end
+SUGGESTIONS -> SUGGESTIONS : 4.4.1.1. Detecta o foco na tela : useEnterScreen()
+SUGGESTIONS -> SUGGESTIONS : 4.4.1.2. Indica que o Teste Vocacional foi concluído : setSurveyDone()
+SUGGESTIONS -> SUGGESTIONS : 4.4.1.3. Recarrega as informações de Campus e Cursos : useCampusData()
+SUGGESTIONS -->> SUGGESTIONS : Retorna os dados dos Campus contendo os cursos e professores : Optional<CampusWithCourseResponse>[]
+SUGGESTIONS -> SUGGESTIONS : 4.4.1.4. Obtém os resultados do teste vocacional : useSurveyResults()
+SUGGESTIONS -->> SUGGESTIONS : Retorna um objeto contendo um Getter e Setter dos resultados : SurveyResultsHook
+SUGGESTIONS -> SUGGESTIONS : 4.4.1.5. Mapeia e exibe todos os cursos encontrados e suas pontuações: map()
+SUGGESTIONS -->> SUGGESTIONS : Retorna as fileiras de cursos a serem renderizados : JSX.Element[]
+note left
+  Nesta etapa, toda a funcionalidade 
+  foi concluída e os devidos elementos 
+  gráficos foram exibidos na tela 
+  conforme esperado.
+end note
+
+@enduml

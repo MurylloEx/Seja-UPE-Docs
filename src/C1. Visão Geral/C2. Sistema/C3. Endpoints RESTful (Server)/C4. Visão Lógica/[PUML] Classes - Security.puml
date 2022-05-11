@@ -1,0 +1,21 @@
+@startuml "Class Diagram"
+
+title "Diagrama de Classes - Segurança e Guards"
+
+left to right direction
+
+class JwtAuthGuard {
+  +canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean>
+  +handleRequest(err: any, user: any, info: any): any
+}
+
+class AuthorizeGuard implements CanActivate {
+  -reflector: Reflector
+  +canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean>
+}
+
+class JwtStrategy {
+  +validate(payload: any): Promise<any>
+}
+
+@enduml
