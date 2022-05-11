@@ -1,5 +1,6 @@
-
 @startuml "Sequence Diagram"
+
+title "Diagrama de Sequência - Obter Contatos do Campus"
 
 actor "Usuário"                   as USER
 control "CampusController"        as CAMPUS_CONTROLLER

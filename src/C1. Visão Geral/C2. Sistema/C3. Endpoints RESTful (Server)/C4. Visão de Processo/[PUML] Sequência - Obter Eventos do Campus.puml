@@ -1,5 +1,7 @@
 @startuml "Sequence Diagram"
 
+title "Diagrama de Sequência - Obter Eventos do Campus"
+
 actor "Usuário"                   as USER
 control "CampusController"        as CAMPUS_CONTROLLER
 participant "CourseService"       as COURSE_SERVICE

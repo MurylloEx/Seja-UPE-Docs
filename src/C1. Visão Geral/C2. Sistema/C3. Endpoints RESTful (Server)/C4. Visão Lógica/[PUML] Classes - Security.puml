@@ -1,5 +1,7 @@
 @startuml "Class Diagram"
 
+title "Diagrama de Classes - Segurança e Guards"
+
 left to right direction
 
 class JwtAuthGuard {

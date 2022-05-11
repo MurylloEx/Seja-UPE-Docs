@@ -1,5 +1,7 @@
 @startuml "Class Diagram"
 
+title "Diagrama de Classes - Exceções"
+
 left to right direction
 
 interface Error 

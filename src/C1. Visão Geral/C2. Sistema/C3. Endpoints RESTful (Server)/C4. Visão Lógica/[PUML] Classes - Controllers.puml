@@ -1,5 +1,7 @@
 @startuml "Class Diagram"
 
+title "Diagrama de Classes - Controladores"
+
 class AuthController {
   -authService: AuthService
   +onAuthRequested(body: AuthorizationValidator): Promise<{ bearer: string; payload: TokenPayload; }>

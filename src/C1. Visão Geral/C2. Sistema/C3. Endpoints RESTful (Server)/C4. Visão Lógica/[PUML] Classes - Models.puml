@@ -1,5 +1,7 @@
 @startuml "Class Diagram"
 
+title "Diagrama de Classes - Entidades e Modelos"
+
 class ApiResponse<T> {
   +timestamp: string
   +path: string
