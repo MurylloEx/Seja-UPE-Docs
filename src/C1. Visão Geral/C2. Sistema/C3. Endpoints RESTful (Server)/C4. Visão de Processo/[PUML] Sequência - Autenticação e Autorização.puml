@@ -1,6 +1,6 @@
 @startuml "Sequence Diagram"
 
-title ""
+title "Diagrama de Sequência - Autenticação e Autorização"
 
 actor "Usuário"                         as USER
 control "AuthController"                as AUTH_CONTROLLER

@@ -1,5 +1,7 @@
 @startuml "Class Diagram"
 
+title "Diagrama de Classes - Módulos"
+
 left to right direction
 
 class ServicesModule

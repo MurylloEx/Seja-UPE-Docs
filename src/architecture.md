@@ -118,3 +118,4 @@ Diante disso o “Seja UPE” apresenta-se como um aplicativo mobile que visa di
 | NestJS | Framework de desenvolvimento de aplicações webservice e serviços de back-end |
 | Back-end | É um termo que representa a aplicação residente no lado do servidor |
 | MSC | Model-Service-Controller para estruturamento do projeto |
+| JSVM | JavaScript Virtual Machine |

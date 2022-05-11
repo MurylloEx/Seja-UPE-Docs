@@ -1,5 +1,7 @@
 @startuml "Class Diagram"
 
+title "Diagrama de Classes - Filtros"
+
 class HttpExceptionFilter implements ExceptionFilter {
   -logger: Logger
   +getExceptionName(exception: HttpException): string

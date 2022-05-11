@@ -1,5 +1,7 @@
 @startuml "Class Diagram"
 
+title "Diagrama de Classes - Interceptadores"
+
 left to right direction
 
 class NestInterceptor {

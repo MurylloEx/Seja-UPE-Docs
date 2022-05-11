@@ -1,5 +1,7 @@
 @startuml "Sequence Diagram"
 
+title "Diagrama de Sequência - Teste Vocacional"
+
 actor "Usuário"         as USER
 boundary "Suggestions"  as SUGGESTIONS
 boundary "Survey"       as SURVEY

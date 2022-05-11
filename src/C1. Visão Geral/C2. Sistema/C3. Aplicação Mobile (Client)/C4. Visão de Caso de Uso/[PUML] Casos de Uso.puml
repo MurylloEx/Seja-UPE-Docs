@@ -11,6 +11,7 @@ scale 2048 height
 
 actor "Usuário" as USER
 
+usecase "[UC-27] Lembrete do teste vocacional"                      as UC27
 usecase "[UC-01] Exibir cursos de um determinado campus"            as UC01
 usecase "[UC-25] Realizar login"                                    as UC25
 
@@ -50,6 +51,7 @@ package "Campi e Informações da UPE" {
 USER -- UC25
 USER -- UC01
 USER -- UC16
+USER -- UC27
 USER -- UC23
 USER -- UC17
 

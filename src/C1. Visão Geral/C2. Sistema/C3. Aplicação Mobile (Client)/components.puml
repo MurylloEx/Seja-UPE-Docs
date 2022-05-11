@@ -27,7 +27,7 @@ Container_Boundary(ContainerMobileApp, "Mobile App") {
     Component(ComponentAppRequestHook, "Request Hook", "Component: Axios Request Hook", "Permite realizar requisições Http utilizando useRequest e useAuthorizedRequest")
   }
 
-  Container_Boundary(ContainerMobileAppServices, "Hook") {
+  Container_Boundary(ContainerMobileAppServices, "Services") {
     Component(ComponentAppHttpService, "Http Service", "Component: Axios Client", "Encapsula e provê o acesso simplificado aos métodos HTTP do Axios Client")
     Component(ComponentAppOAuth2Service, "OAuth2 Service", "Component: Expo Google Auth", "Encapsula e provê o acesso simplificado à API para exibir o diálogo de Autenticação Google")
   }
